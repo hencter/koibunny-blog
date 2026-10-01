@@ -9,7 +9,7 @@ baseURL = 'https://example.org/'
 title = 'NEXUS'
 theme = 'nexus'
 
-locale = 'zh-cn'
+locale = 'zh-CN'
 defaultContentLanguage = 'zh-cn'
 timeZone = 'Asia/Shanghai'
 
@@ -33,6 +33,9 @@ enableGitInfo = true
   # 中文日期用显式布局：`:date_long` 这类本地化 token 对 zh-CN 会退回英文
   dateFormat = '2006年1月2日'
   listDateFormat = '2006-01-02'
+
+  # 社交分享图，相对 static/，模板会用 absURL 转成绝对地址
+  ogImage = 'images/og-default.png'
 
   # 社交链接（有序列表，顺序即显示顺序）
   [[params.social]]

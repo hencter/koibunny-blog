@@ -79,8 +79,10 @@
 <link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
 {{- end }}
 
-{{- /* 多语言互指：单语言站点不必自指，避免制造噪音 */}}
-{{- if gt (len site.Languages) 1 }}
+{{- /* 多语言互指：单语言站点不必自指，避免制造噪音。
+       不读 site.Languages —— 该 API 自 0.156.0 起弃用；
+       .AllTranslations 只有一条时说明本页没有其他语言版本，同样不必输出。 */}}
+{{- if gt (len .AllTranslations) 1 }}
 {{- range .AllTranslations }}
 <link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
 {{- end }}

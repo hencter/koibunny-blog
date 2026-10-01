@@ -21,7 +21,7 @@
       <ul class="hero-social">
         {{- range . }}
         <li>
-          <a href="{{ .url }}"{{ if not (hasPrefix .url "mailto:") }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
+          <a href="{{ .url }}"{{ if hasPrefix .url "http" }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
         </li>
         {{- end }}
       </ul>

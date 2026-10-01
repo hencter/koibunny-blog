@@ -112,7 +112,9 @@
 
   /* ── 4. 首页终端逐行打字 ───────────────────────────────────────────────
      文本已经由 Hugo 渲染在 HTML 里；这里只是把它重打成动画，
-     所以禁用 JS 或减弱动效时内容照样在。 */
+     所以禁用 JS 或减弱动效时内容照样在。
+     因为动画会先清空文本，这里加了看门狗：任何原因导致动画没跑完，
+     就把原始文本放回去，绝不让内容真的消失。 */
   var terminal = document.querySelector("[data-terminal] code");
 
   if (terminal && !reduceMotion) {
@@ -120,6 +122,18 @@
     var texts = lines.map(function (line) {
       return line.textContent;
     });
+    var finished = false;
+
+    var restore = function () {
+      if (finished) return;
+      finished = true;
+      window.clearTimeout(watchdog);
+      lines.forEach(function (line, index) {
+        line.textContent = texts[index];
+      });
+    };
+
+    var watchdog = window.setTimeout(restore, 8000);
 
     lines.forEach(function (line) {
       line.textContent = "";
@@ -128,31 +142,40 @@
     var lineIndex = 0;
 
     var typeLine = function () {
-      if (lineIndex >= lines.length) {
-        terminal.classList.add("is-typed");
-        return;
-      }
-
-      var line = lines[lineIndex];
-      var full = texts[lineIndex];
-      // 命令逐个字符打出来，输出行整行出现：更像真实终端
-      var isCommand = line.classList.contains("tl-cmd");
-      var step = isCommand ? 1 : full.length;
-      var pos = 0;
-
-      var tick = function () {
-        pos = Math.min(full.length, pos + step);
-        line.textContent = full.slice(0, pos);
-
-        if (pos < full.length) {
-          window.setTimeout(tick, isCommand ? 34 : 0);
-        } else {
-          lineIndex += 1;
-          window.setTimeout(typeLine, isCommand ? 260 : 90);
+      try {
+        if (lineIndex >= lines.length) {
+          finished = true;
+          window.clearTimeout(watchdog);
+          return;
         }
-      };
 
-      tick();
+        var line = lines[lineIndex];
+        var full = texts[lineIndex];
+        // 命令逐个字符打出来，输出行整行出现：更像真实终端
+        var isCommand = line.classList.contains("tl-cmd");
+        var step = isCommand ? 1 : full.length;
+        var pos = 0;
+
+        var tick = function () {
+          try {
+            pos = Math.min(full.length, pos + step);
+            line.textContent = full.slice(0, pos);
+
+            if (pos < full.length) {
+              window.setTimeout(tick, isCommand ? 34 : 0);
+            } else {
+              lineIndex += 1;
+              window.setTimeout(typeLine, isCommand ? 260 : 90);
+            }
+          } catch (err) {
+            restore();
+          }
+        };
+
+        tick();
+      } catch (err) {
+        restore();
+      }
     };
 
     window.setTimeout(typeLine, 320);
