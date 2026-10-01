@@ -1,0 +1,90 @@
+{{- /*
+  页头：SEO、社交卡片、结构化数据、样式表。
+  约定见 https://gohugo.io/templates/head/ —— 这里只输出「只有一个真实来源」的标签。
+*/ -}}
+{{- $desc := site.Params.description | default site.Title -}}
+{{- with .Description -}}
+  {{- $desc = . -}}
+{{- else -}}
+  {{- /* 首页保留站点级描述，不要退化成正文摘要 */ -}}
+  {{- if not .IsHome -}}
+    {{- with .Summary -}}{{- $desc = . -}}{{- end -}}
+  {{- end -}}
+{{- end -}}
+{{- $desc = $desc | plainify | htmlUnescape | chomp | truncate 160 -}}
+
+{{- $title := site.Title -}}
+{{- if not .IsHome -}}
+  {{- $title = printf "%s · %s" .Title site.Title -}}
+{{- end -}}
+
+{{- $isProd := eq hugo.Environment "production" -}}
+{{- $noindex := $isProd | not -}}
+{{- if .Params.noindex }}{{ $noindex = true }}{{ end -}}
+
+{{- $ogType := "website" -}}
+{{- if .IsPage }}{{ $ogType = "article" }}{{ end -}}
+
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{ $title }}</title>
+<meta name="description" content="{{ $desc }}">
+<meta name="author" content="{{ site.Params.author | default site.Title }}">
+<link rel="canonical" href="{{ .Permalink }}">
+{{ if $noindex -}}
+<meta name="robots" content="noindex, nofollow">
+{{- else -}}
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
+{{- end }}
+<meta name="theme-color" content="#05060c">
+<meta name="color-scheme" content="dark">
+
+{{- /* Open Graph */}}
+<meta property="og:site_name" content="{{ site.Title }}">
+<meta property="og:title" content="{{ $title }}">
+<meta property="og:description" content="{{ $desc }}">
+<meta property="og:url" content="{{ .Permalink }}">
+<meta property="og:type" content="{{ $ogType }}">
+<meta property="og:locale" content="{{ replace site.Language.Locale "-" "_" }}">
+{{- with site.Params.ogImage }}
+<meta property="og:image" content="{{ . | absURL }}">
+{{- end }}
+{{- if .IsPage }}
+{{- if not .Date.IsZero }}
+<meta property="article:published_time" content="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}
+{{- if not .Lastmod.IsZero }}
+<meta property="article:modified_time" content="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">
+{{- end }}
+{{- range .Params.tags }}
+<meta property="article:tag" content="{{ . }}">
+{{- end }}
+{{- end }}
+
+{{- /* Twitter / X */}}
+<meta name="twitter:card" content="{{ cond (ne site.Params.ogImage nil) "summary_large_image" "summary" }}">
+<meta name="twitter:title" content="{{ $title }}">
+<meta name="twitter:description" content="{{ $desc }}">
+{{- with site.Params.ogImage }}
+<meta name="twitter:image" content="{{ . | absURL }}">
+{{- end }}
+
+{{- /* 图标 */}}
+<link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
+<link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32">
+<link rel="apple-touch-icon" href="{{ "favicon.ico" | relURL }}">
+
+{{- /* 订阅源：只有 home/section/taxonomy/term 才有 rss 输出格式 */}}
+{{- with .OutputFormats.Get "rss" }}
+<link rel="alternate" type="{{ .MediaType.Type }}" href="{{ .Permalink }}" title="{{ site.Title }}">
+{{- end }}
+
+{{- /* 多语言互指：单语言站点不必自指，避免制造噪音 */}}
+{{- if gt (len site.Languages) 1 }}
+{{- range .AllTranslations }}
+<link rel="alternate" hreflang="{{ .Language.Locale }}" href="{{ .Permalink }}">
+{{- end }}
+{{- end }}
+
+{{- partialCached "head/css.html" . }}
+{{- partial "schema.html" . }}

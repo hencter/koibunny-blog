@@ -1,0 +1,32 @@
+{{- /*
+  baseof.html — 项目的「契约层」。
+
+  这里只放骨架、块名，以及每个主题都必须提供的 partial 名；
+  真正的视觉与页面结构属于 themes/nexus/layouts/。
+  换主题时只要新主题提供下面这些 partial 和块，本站骨架不用改。
+
+  契约（主题必须提供）：
+    partials: head.html, header.html, footer.html, scripts.html
+    blocks:   main
+*/ -}}
+<!DOCTYPE html>
+<html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}">
+<head>
+  {{ partial "head.html" . }}
+</head>
+<body class="kind-{{ .Kind }}{{ if .IsHome }} is-home{{ end }}">
+  <a class="skip-link" href="#main">跳到主要内容</a>
+  <div class="bg-layer" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+  <header class="site-header">
+    {{ partial "header.html" . }}
+  </header>
+  <main id="main" class="site-main">
+    {{ block "main" . }}{{ end }}
+  </main>
+  <footer class="site-footer">
+    {{ partial "footer.html" . }}
+  </footer>
+  {{ partial "scripts.html" . }}
+</body>
+</html>

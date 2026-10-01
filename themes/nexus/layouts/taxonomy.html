@@ -1,0 +1,29 @@
+{{ define "main" }}
+  {{- $terms := .Pages.ByTitle -}}
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">分类法</p>
+      <h1 class="page-head-title">{{ .Title }}</h1>
+      {{- with .Description }}
+      <p class="page-head-lead">{{ . }}</p>
+      {{- end }}
+      {{- with .Content }}
+      <div class="prose page-head-intro">{{ . }}</div>
+      {{- end }}
+      <p class="page-head-meta">{{ len $terms }} 个标签</p>
+    </header>
+
+    {{- with $terms }}
+    <ul class="term-cloud">
+      {{- range . }}
+      <li>
+        <a class="term-chip hue-{{ mod (len .LinkTitle) 6 }}" href="{{ .RelPermalink }}">
+          <span class="term-name">{{ .LinkTitle }}</span>
+          <span class="term-count">{{ len .Pages }}</span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+    {{- end }}
+  </div>
+{{ end }}

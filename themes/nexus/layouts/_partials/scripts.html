@@ -1,0 +1,12 @@
+{{- /* 脚本：同样走核心资源管线，生产环境压缩 + 指纹 + integrity。 */ -}}
+{{- with resources.Get "js/main.js" -}}
+  {{- if hugo.IsProduction -}}
+    {{- with . | minify | fingerprint -}}
+<script src="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous"></script>
+    {{- end -}}
+  {{- else -}}
+<script src="{{ .RelPermalink }}"></script>
+  {{- end -}}
+{{- else -}}
+  {{- errorf "scripts.html: 缺少脚本 assets/js/main.js" -}}
+{{- end -}}

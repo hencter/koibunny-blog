@@ -1,0 +1,102 @@
+{{ define "main" }}
+  {{- $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse -}}
+  {{- $projects := (where site.RegularPages "Section" "projects").ByWeight -}}
+  {{- $tags := site.Taxonomies.tags.ByCount -}}
+
+  {{- /* ── Hero ───────────────────────────────────────────────────────── */}}
+  <section class="hero wrap">
+    <div class="hero-copy">
+      {{- with site.Params.tagline }}
+      <p class="eyebrow">{{ . }}</p>
+      {{- end }}
+      <h1 class="hero-title">{{ site.Title }}</h1>
+      {{- with site.Params.description }}
+      <p class="hero-lead">{{ . }}</p>
+      {{- end }}
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="{{ "/posts/" | relURL }}">阅读文章</a>
+        <a class="btn" href="{{ "/about/" | relURL }}">关于我</a>
+      </div>
+      {{- with site.Params.social }}
+      <ul class="hero-social">
+        {{- range . }}
+        <li>
+          <a href="{{ .url }}"{{ if not (hasPrefix .url "mailto:") }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
+        </li>
+        {{- end }}
+      </ul>
+      {{- end }}
+    </div>
+
+    {{- with site.Params.hero }}
+    {{- $prompt := .prompt | default "~" -}}
+    {{- $owner := site.Params.author | default "guest" -}}
+    <div class="terminal hero-terminal" role="img" aria-label="终端风格的个人简介">
+      <div class="terminal-bar">
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-dot" aria-hidden="true"></span>
+        <span class="terminal-title">{{ $owner }}@{{ lower site.Title }}</span>
+      </div>
+      <pre class="terminal-body" data-terminal><code>{{- range $i, $line := .lines }}{{ if mod $i 2 }}<span class="tl tl-out">{{ $line }}</span>{{ else }}<span class="tl tl-cmd"><span class="tl-prompt">{{ $prompt }} $</span> {{ $line }}</span>{{ end }}{{ end }}</code></pre>
+    </div>
+    {{- end }}
+  </section>
+
+  {{- /* ── 首页正文（content/_index.md） ───────────────────────────────── */}}
+  {{- with .Content }}
+  <section class="wrap section-block">
+    <div class="prose home-intro">{{ . }}</div>
+  </section>
+  {{- end }}
+
+  {{- /* ── 最新文章 ───────────────────────────────────────────────────── */}}
+  {{- with $posts }}
+  <section class="wrap section-block">
+    <div class="section-head">
+      <h2 class="section-title"><span class="section-index" aria-hidden="true">01</span>最新文章</h2>
+      <a class="section-more" href="{{ "/posts/" | relURL }}">全部文章<span aria-hidden="true"> →</span></a>
+    </div>
+    <div class="post-grid">
+      {{- range first 6 . }}
+        {{- partial "post-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+
+  {{- /* ── 项目 ───────────────────────────────────────────────────────── */}}
+  {{- with $projects }}
+  <section class="wrap section-block">
+    <div class="section-head">
+      <h2 class="section-title"><span class="section-index" aria-hidden="true">02</span>项目</h2>
+      <a class="section-more" href="{{ "/projects/" | relURL }}">全部项目<span aria-hidden="true"> →</span></a>
+    </div>
+    <div class="project-grid">
+      {{- range first 3 . }}
+        {{- partial "project-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+  </section>
+  {{- end }}
+
+  {{- /* ── 标签 ───────────────────────────────────────────────────────── */}}
+  {{- with $tags }}
+  <section class="wrap section-block">
+    <div class="section-head">
+      <h2 class="section-title"><span class="section-index" aria-hidden="true">03</span>标签</h2>
+      <a class="section-more" href="{{ "/tags/" | relURL }}">全部标签<span aria-hidden="true"> →</span></a>
+    </div>
+    <ul class="term-cloud">
+      {{- range first 14 . }}
+      <li>
+        <a class="term-chip hue-{{ mod (len .Page.LinkTitle) 6 }}" href="{{ .Page.RelPermalink }}">
+          <span class="term-name">{{ .Page.LinkTitle }}</span>
+          <span class="term-count">{{ .Count }}</span>
+        </a>
+      </li>
+      {{- end }}
+    </ul>
+  </section>
+  {{- end }}
+{{ end }}

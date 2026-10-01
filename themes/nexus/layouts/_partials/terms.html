@@ -1,0 +1,19 @@
+{{- /*
+  渲染某个页面上的某个分类法的标签（带链接的 chip）。
+
+  @context {page}   page      当前页面
+  @context {string} taxonomy  分类法名，例如 "tags"
+
+  @example {{ partial "terms.html" (dict "page" . "taxonomy" "tags") }}
+
+  用 $page.GetTerms 而不是手拼 URL：术语页的真实地址由 Hugo 决定，
+  手拼 /tags/<urlize>/ 在中文标签上会对不上。
+*/ -}}
+{{- $page := .page -}}
+{{- with $page.GetTerms .taxonomy -}}
+<ul class="tag-list">
+  {{- range . }}
+  <li><a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+  {{- end }}
+</ul>
+{{- end -}}

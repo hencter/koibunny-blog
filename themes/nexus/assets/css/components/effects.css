@@ -1,0 +1,111 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   effects.css — 背景网格、光晕、滚动进度条、终端光标
+   全部用 CSS 渐变绘制，不依赖任何图片资源。
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.bg-layer {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image:
+    /* 两团霓虹光晕 */
+    radial-gradient(60rem 40rem at 12% -10%, rgba(34, 211, 238, 0.14), transparent 65%),
+    radial-gradient(52rem 36rem at 92% 4%, rgba(240, 80, 158, 0.11), transparent 62%),
+    radial-gradient(46rem 34rem at 50% 108%, rgba(139, 92, 246, 0.12), transparent 66%),
+    /* 细网格 */
+      linear-gradient(to right, rgba(125, 165, 255, 0.055) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(125, 165, 255, 0.055) 1px, transparent 1px);
+  background-size: 100% 100%, 100% 100%, 100% 100%, 56px 56px, 56px 56px;
+  mask-image: radial-gradient(120% 90% at 50% 0%, #000 45%, transparent 100%);
+  -webkit-mask-image: radial-gradient(120% 90% at 50% 0%, #000 45%, transparent 100%);
+}
+
+/* 固定顶栏下方的细扫描线 */
+.bg-layer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0.014) 0 1px,
+    transparent 1px 3px
+  );
+  opacity: 0.5;
+}
+
+/* ── 滚动进度条 ────────────────────────────────────────────────────────── */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  z-index: 60;
+  background: transparent;
+  pointer-events: none;
+}
+
+.scroll-progress span {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: linear-gradient(90deg, var(--cyan), var(--violet) 50%, var(--magenta));
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.8);
+  transition: width 0.08s linear;
+}
+
+/* ── 终端光标 ──────────────────────────────────────────────────────────── */
+
+.terminal-body code::after {
+  content: "▋";
+  margin-left: 2px;
+  color: var(--cyan);
+  animation: cursor-blink 1.05s steps(2, start) infinite;
+}
+
+@keyframes cursor-blink {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+
+/* ── 品牌标记的呼吸光 ──────────────────────────────────────────────────── */
+
+@keyframes mark-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 1px rgba(34, 211, 238, 0.5), 0 0 18px -4px rgba(34, 211, 238, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 1px rgba(240, 80, 158, 0.6), 0 0 24px -2px rgba(240, 80, 158, 0.6);
+  }
+}
+
+/* ── 入场动画：只在支持动画且不要求减弱动效时启用 ─────────────────────── */
+
+@media (prefers-reduced-motion: no-preference) {
+  .hero-copy > *,
+  .post-card,
+  .project-card,
+  .section-head {
+    animation: rise 0.5s ease both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+}

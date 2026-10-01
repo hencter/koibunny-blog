@@ -1,0 +1,47 @@
+{{- /*
+  结构化数据（JSON-LD）。
+
+  关键点：把 dict 对象本身交给模板，而不是 `jsonify` 之后再插进 <script>。
+  <script> 是 JavaScript 上下文，Hugo 会把对象序列化成经过转义的 JSON；
+  若先 jsonify 成字符串，这里就会再被当成字符串字面量编码一次，所有消费者都会拒绝。
+  https://gohugo.io/functions/safe/js/
+*/ -}}
+{{- $author := site.Params.author | default site.Title -}}
+{{- $schema := dict
+  "@context" "https://schema.org"
+  "@type" "WebSite"
+  "name" site.Title
+  "url" site.BaseURL
+  "inLanguage" site.Language.Locale
+  "author" (dict "@type" "Person" "name" $author)
+-}}
+{{- with site.Params.description -}}
+  {{- $schema = merge $schema (dict "description" .) -}}
+{{- end -}}
+
+{{- if .IsPage -}}
+  {{- $article := dict
+    "@context" "https://schema.org"
+    "@type" "BlogPosting"
+    "headline" .Title
+    "url" .Permalink
+    "mainEntityOfPage" (dict "@type" "WebPage" "@id" .Permalink)
+    "inLanguage" site.Language.Locale
+    "author" (dict "@type" "Person" "name" $author)
+    "publisher" (dict "@type" "Person" "name" $author)
+  -}}
+  {{- if not .Date.IsZero -}}
+    {{- $article = merge $article (dict "datePublished" (.Date.Format "2006-01-02T15:04:05Z07:00")) -}}
+  {{- end -}}
+  {{- if not .Lastmod.IsZero -}}
+    {{- $article = merge $article (dict "dateModified" (.Lastmod.Format "2006-01-02T15:04:05Z07:00")) -}}
+  {{- end -}}
+  {{- with .Description -}}
+    {{- $article = merge $article (dict "description" .) -}}
+  {{- end -}}
+  {{- with .Params.tags -}}
+    {{- $article = merge $article (dict "keywords" .) -}}
+  {{- end -}}
+  {{- $schema = $article -}}
+{{- end -}}
+<script type="application/ld+json">{{ $schema }}</script>

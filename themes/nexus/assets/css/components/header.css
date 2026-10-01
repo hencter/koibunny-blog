@@ -1,0 +1,208 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   header.css — 固定顶栏与导航
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  border-bottom: 1px solid var(--line);
+  background: rgba(5, 6, 12, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+}
+
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  min-height: var(--header-h);
+}
+
+/* ── 品牌 ──────────────────────────────────────────────────────────────── */
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-right: auto;
+  color: var(--fg);
+}
+
+.brand:hover {
+  color: var(--fg);
+}
+
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  border-radius: 10px;
+  background: linear-gradient(140deg, rgba(34, 211, 238, 0.22), rgba(240, 80, 158, 0.22));
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--cyan);
+  animation: mark-pulse 4.5s ease-in-out infinite;
+}
+
+.brand-text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.brand-name {
+  font-size: 1.06rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+}
+
+.brand-tagline {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--fg-faint);
+  letter-spacing: 0.02em;
+}
+
+/* ── 导航 ──────────────────────────────────────────────────────────────── */
+
+.site-nav {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.menu {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  list-style: none;
+}
+
+.menu-item a {
+  display: block;
+  padding: 6px 12px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  color: var(--fg-dim);
+  border: 1px solid transparent;
+  transition: color 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+}
+
+.menu-item a:hover {
+  color: var(--fg);
+  background: rgba(125, 165, 255, 0.08);
+}
+
+.menu-item.is-active a {
+  color: var(--cyan);
+  border-color: var(--line-strong);
+  background: rgba(34, 211, 238, 0.09);
+}
+
+.nav-rss {
+  padding: 5px 12px;
+  border-radius: 999px;
+  border: 1px solid var(--line-strong);
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.08em;
+  color: var(--fg-dim);
+}
+
+.nav-rss:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+  box-shadow: 0 0 20px -6px rgba(34, 211, 238, 0.7);
+}
+
+/* ── 移动端开关 ────────────────────────────────────────────────────────── */
+
+.nav-toggle {
+  display: none;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border-radius: 10px;
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.02);
+  cursor: pointer;
+}
+
+.nav-toggle-bars {
+  display: grid;
+  gap: 4px;
+  justify-content: center;
+}
+
+.nav-toggle-bars span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--fg-dim);
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars span:nth-child(1) {
+  transform: translateY(5.5px) rotate(45deg);
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars span:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-toggle[aria-expanded="true"] .nav-toggle-bars span:nth-child(3) {
+  transform: translateY(-5.5px) rotate(-45deg);
+}
+
+@media (max-width: 860px) {
+  .nav-toggle {
+    display: block;
+  }
+
+  .brand-tagline {
+    display: none;
+  }
+
+  /* 没有 JS 时导航保持展开；JS 就绪后才由 [data-nav-ready] 收起来 */
+  .site-nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 10px;
+    padding: 14px var(--pad) 20px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(7, 9, 17, 0.97);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+
+  html[data-nav-ready] .site-nav {
+    display: none;
+  }
+
+  html[data-nav-ready] .site-nav.is-open {
+    display: flex;
+  }
+
+  .menu {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 2px;
+  }
+
+  .menu-item a {
+    padding: 10px 12px;
+  }
+
+  .nav-rss {
+    align-self: flex-start;
+  }
+}

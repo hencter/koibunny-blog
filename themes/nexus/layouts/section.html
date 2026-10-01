@@ -1,0 +1,35 @@
+{{ define "main" }}
+  {{- $isProject := eq .Section "projects" -}}
+  {{- $pages := .Pages.ByDate.Reverse -}}
+  {{- if $isProject }}{{ $pages = .Pages.ByWeight }}{{ end -}}
+
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">{{ if $isProject }}项目{{ else }}文章{{ end }}</p>
+      <h1 class="page-head-title">{{ .Title }}</h1>
+      {{- with .Description }}
+      <p class="page-head-lead">{{ . }}</p>
+      {{- end }}
+      {{- with .Content }}
+      <div class="prose page-head-intro">{{ . }}</div>
+      {{- end }}
+      <p class="page-head-meta">{{ len $pages }} 个条目</p>
+    </header>
+
+    {{- if $isProject }}
+    <div class="project-grid">
+      {{- range $pages }}
+        {{- partial "project-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+    {{- else }}
+    {{- $paginator := .Paginate $pages }}
+    <div class="post-grid">
+      {{- range $paginator.Pages }}
+        {{- partial "post-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+    {{ partial "pagination.html" . }}
+    {{- end }}
+  </div>
+{{ end }}

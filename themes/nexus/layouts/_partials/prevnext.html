@@ -1,0 +1,39 @@
+{{- /*
+  上一篇 / 下一篇。
+
+  不依赖 .NextInSection / .PrevInSection 的顺序，而是在同节页面里按日期排序后
+  查找当前页的下标：顺序由这里决定，可预测。
+  只对真正的 section（不是 home/root 页面）生效，否则 about 这类页面会拿到全站页面。
+*/ -}}
+{{- $section := .CurrentSection -}}
+{{- if eq $section.Kind "section" -}}
+  {{- $pages := $section.RegularPages.ByDate -}}
+  {{- $prev := false -}}
+  {{- $next := false -}}
+  {{- range $i, $p := $pages -}}
+    {{- if eq $p.RelPermalink $.RelPermalink -}}
+      {{- if gt $i 0 }}{{ $prev = index $pages (sub $i 1) }}{{ end -}}
+      {{- if lt $i (sub (len $pages) 1) }}{{ $next = index $pages (add $i 1) }}{{ end -}}
+    {{- end -}}
+  {{- end -}}
+  {{- if or $prev $next }}
+<nav class="prevnext wrap" aria-label="上下篇">
+    {{- with $prev }}
+  <a class="prevnext-item" href="{{ .RelPermalink }}">
+    <span class="prevnext-label"><span aria-hidden="true">←</span> 上一篇</span>
+    <span class="prevnext-title">{{ .LinkTitle }}</span>
+  </a>
+    {{- else }}
+  <span class="prevnext-item is-empty"></span>
+    {{- end }}
+    {{- with $next }}
+  <a class="prevnext-item prevnext-next" href="{{ .RelPermalink }}">
+    <span class="prevnext-label">下一篇 <span aria-hidden="true">→</span></span>
+    <span class="prevnext-title">{{ .LinkTitle }}</span>
+  </a>
+    {{- else }}
+  <span class="prevnext-item is-empty"></span>
+    {{- end }}
+</nav>
+  {{- end -}}
+{{- end -}}

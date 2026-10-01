@@ -1,0 +1,12 @@
+{{ define "main" }}
+  <div class="wrap error-page">
+    <p class="eyebrow">Error / 404</p>
+    <h1 class="page-head-title error-title">页面走丢了</h1>
+    <p class="page-head-lead">这个地址没有对应的页面。可能是链接过期，或者我把它改名了。</p>
+    <pre class="terminal-body error-terminal"><code><span class="tl tl-cmd"><span class="tl-prompt">~ $</span> curl -I <span data-404-path>/404.html</span></span><span class="tl tl-out">HTTP/2 404</span><span class="tl tl-out">content-type: text/html; charset=utf-8</span></code></pre>
+    <div class="hero-actions">
+      <a class="btn btn-primary" href="{{ site.Home.RelPermalink }}">回到首页</a>
+      <a class="btn" href="{{ "/posts/" | relURL }}">浏览文章</a>
+    </div>
+  </div>
+{{ end }}

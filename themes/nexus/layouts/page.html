@@ -1,0 +1,72 @@
+{{ define "main" }}
+  {{- $isProject := eq .Section "projects" -}}
+  {{- $dateFormat := site.Params.dateFormat | default "2006年1月2日" -}}
+  <article class="article wrap">
+    <nav class="breadcrumb" aria-label="面包屑">
+      <a href="{{ site.Home.RelPermalink }}">首页</a>
+      <span class="sep" aria-hidden="true">/</span>
+      {{- $section := .CurrentSection -}}
+      {{- if and $section (ne $section.RelPermalink site.Home.RelPermalink) }}
+      <a href="{{ $section.RelPermalink }}">{{ $section.LinkTitle }}</a>
+      <span class="sep" aria-hidden="true">/</span>
+      {{- end }}
+      <span class="current">{{ .LinkTitle }}</span>
+    </nav>
+
+    <header class="article-header">
+      <p class="eyebrow">{{ if $isProject }}项目{{ else }}文章{{ end }}</p>
+      <h1 class="article-title">{{ .Title }}</h1>
+      {{- with .Description }}
+      <p class="article-lead">{{ . }}</p>
+      {{- end }}
+
+      <div class="article-meta">
+        {{- if not .Date.IsZero }}
+        <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ time.Format $dateFormat .Date }}</time>
+        <span class="sep" aria-hidden="true">·</span>
+        {{- end }}
+        <span>{{ .ReadingTime }} 分钟阅读</span>
+        <span class="sep" aria-hidden="true">·</span>
+        <span>{{ .WordCount }} 字</span>
+      </div>
+
+      {{- if $isProject }}
+      <div class="project-meta">
+        {{- with .Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+        {{- with .Params.stack }}
+        <ul class="stack">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
+        {{- end }}
+        {{- with .Params.repo }}<a class="btn btn-sm" href="{{ . }}" target="_blank" rel="noopener">源码<span aria-hidden="true"> ↗</span></a>{{ end }}
+        {{- with .Params.demo }}<a class="btn btn-sm" href="{{ . }}" target="_blank" rel="noopener">演示<span aria-hidden="true"> ↗</span></a>{{ end }}
+      </div>
+      {{- end }}
+    </header>
+
+    {{- partial "toc.html" . }}
+
+    <div class="prose">
+      {{ .Content }}
+    </div>
+
+    <footer class="article-footer">
+      {{- $tags := .GetTerms "tags" -}}
+      {{- if $tags }}
+      <div class="article-tags">
+        <span class="article-tags-label">标签</span>
+        {{ partial "terms.html" (dict "page" . "taxonomy" "tags") }}
+      </div>
+      {{- end }}
+      <p class="article-updated">
+        {{- if not .Lastmod.IsZero }}
+        最后更新：<time datetime="{{ .Lastmod.Format "2006-01-02T15:04:05Z07:00" }}">{{ time.Format $dateFormat .Lastmod }}</time>
+        {{- end }}
+        {{- with .GitInfo }}
+        <span class="sep" aria-hidden="true">·</span>
+        <span title="{{ .Subject }}（{{ .AuthorName }}）">提交 {{ .AbbreviatedHash }}</span>
+        {{- end }}
+      </p>
+    </footer>
+  </article>
+
+  {{- partial "prevnext.html" . }}
+{{ end }}

@@ -1,0 +1,34 @@
+{{- /*
+  样式表管线。
+
+  刻意使用核心功能（resources.Get / Concat / minify / fingerprint）而不是 css.Build，
+  这样标准版 Hugo 也能构建；代价是要显式列出文件顺序。
+  每个文件都用 with 守卫，缺失时报出文件名，而不是让 nil 流进管线后崩掉。
+*/ -}}
+{{- $paths := slice
+  "css/base.css"
+  "css/syntax.css"
+  "css/components/effects.css"
+  "css/components/header.css"
+  "css/components/home.css"
+  "css/components/cards.css"
+  "css/components/article.css"
+  "css/components/footer.css"
+-}}
+{{- $assets := slice -}}
+{{- range $paths -}}
+  {{- with resources.Get . -}}
+    {{- $assets = $assets | append . -}}
+  {{- else -}}
+    {{- errorf "head/css.html: 缺少样式文件 assets/%s" . -}}
+  {{- end -}}
+{{- end -}}
+{{- with $assets | resources.Concat "css/bundle.css" -}}
+  {{- if hugo.IsProduction -}}
+    {{- with . | minify | fingerprint -}}
+<link rel="stylesheet" href="{{ .RelPermalink }}" integrity="{{ .Data.Integrity }}" crossorigin="anonymous">
+    {{- end -}}
+  {{- else -}}
+<link rel="stylesheet" href="{{ .RelPermalink }}">
+  {{- end -}}
+{{- end -}}

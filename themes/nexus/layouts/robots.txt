@@ -1,0 +1,12 @@
+{{- /*
+  robots.txt —— 需要 enableRobotsTXT = true 才会写出该文件。
+
+  只允许 hugo.Environment 为 production 时抓取；`hugo server` 默认是 development，
+  预览站因此整站 Disallow。Sitemap 行始终输出，否则抓取端拿不到 sitemap。
+*/ -}}
+{{- $body := "User-agent: *\nDisallow: /" -}}
+{{- if eq hugo.Environment "production" -}}
+  {{- $body = "User-agent: *\nAllow: /" -}}
+{{- end -}}
+{{ $body }}
+Sitemap: {{ "sitemap.xml" | absURL }}

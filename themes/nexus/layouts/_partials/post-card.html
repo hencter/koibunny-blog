@@ -1,0 +1,38 @@
+{{- /*
+  文章卡片。
+
+  @context {page} page 文章页；也可以直接传一个 page。
+
+  整卡可点用「stretched link」：标题链接铺满卡片，
+  标签链接用 z-index 抬到覆盖层之上，仍然是独立的可点目标。
+*/ -}}
+{{- $p := .page | default . -}}
+{{- $fmt := site.Params.listDateFormat | default "2006-01-02" -}}
+{{- $summary := "" -}}
+{{- with $p.Description -}}
+  {{- $summary = . -}}
+{{- else -}}
+  {{- $summary = $p.Summary | plainify | chomp | truncate 120 -}}
+{{- end -}}
+<article class="post-card">
+  <div class="post-card-top">
+    {{- if not $p.Date.IsZero }}
+    <time datetime="{{ $p.Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ time.Format $fmt $p.Date }}</time>
+    {{- end }}
+    <span class="dot" aria-hidden="true"></span>
+    <span>{{ $p.ReadingTime }} 分钟</span>
+  </div>
+  <h3 class="post-card-title">
+    <a class="post-card-link" href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a>
+  </h3>
+  {{- with $summary }}
+  <p class="post-card-desc">{{ . }}</p>
+  {{- end }}
+  {{- with $p.GetTerms "tags" }}
+  <ul class="tag-list tag-list-sm">
+    {{- range . }}
+    <li><a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+    {{- end }}
+  </ul>
+  {{- end }}
+</article>

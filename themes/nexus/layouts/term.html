@@ -1,0 +1,17 @@
+{{ define "main" }}
+  <div class="wrap">
+    <header class="page-head">
+      <p class="eyebrow">
+        <a href="{{ "/tags/" | relURL }}">全部标签</a>
+      </p>
+      <h1 class="page-head-title"><span class="term-hash" aria-hidden="true">#</span>{{ .Title }}</h1>
+      <p class="page-head-meta">{{ len .Pages }} 篇</p>
+    </header>
+
+    <div class="post-grid">
+      {{- range .Pages.ByDate.Reverse }}
+        {{- partial "post-card.html" (dict "page" .) }}
+      {{- end }}
+    </div>
+  </div>
+{{ end }}

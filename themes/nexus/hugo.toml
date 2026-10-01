@@ -1,0 +1,8 @@
+# 主题配置只能设置 params / menu / outputformats / mediatypes —— 其余键会被忽略。
+# 站点级配置（baseURL、title、locale、menus、markup…）一律放在项目根的 hugo.toml。
+[module]
+  [module.hugoVersion]
+    # 模板只用核心功能：resources.Get / resources.Concat / minify / fingerprint 不需要 extended 版
+    extended = false
+    # 0.158.0 起 languageCode 改名为 locale 且 .Locale 可用；本主题依赖该重命名
+    min = '0.158.0'

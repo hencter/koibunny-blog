@@ -1,0 +1,200 @@
+/* ═══════════════════════════════════════════════════════════════════════════
+   cards.css — 文章卡片、项目卡片、网格、分页
+   ═══════════════════════════════════════════════════════════════════════════ */
+
+.post-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 18px;
+}
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 18px;
+}
+
+/* ── 文章卡片 ──────────────────────────────────────────────────────────── */
+
+.post-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 22px 22px 20px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(15, 20, 36, 0.6), rgba(9, 12, 22, 0.6));
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.post-card::before {
+  /* 顶部霓虹细线：hover 时点亮 */
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--cyan), var(--magenta), transparent);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.post-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-strong);
+  box-shadow: 0 24px 60px -34px rgba(34, 211, 238, 0.8);
+}
+
+.post-card:hover::before {
+  opacity: 1;
+}
+
+.post-card-top {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+  color: var(--fg-faint);
+}
+
+.post-card-title {
+  font-size: 1.1rem;
+  line-height: 1.45;
+}
+
+/* stretched link：标题链接铺满整卡，标签链接靠 z-index 保持可点 */
+.post-card-link {
+  color: var(--fg);
+}
+
+.post-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.post-card:hover .post-card-link {
+  color: var(--cyan);
+}
+
+.post-card-desc {
+  color: var(--fg-dim);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.post-card .tag-list {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  padding-top: 4px;
+}
+
+/* ── 项目卡片 ──────────────────────────────────────────────────────────── */
+
+.project-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: linear-gradient(180deg, rgba(15, 20, 36, 0.6), rgba(9, 12, 22, 0.6));
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.project-card:hover {
+  transform: translateY(-3px);
+  border-color: var(--line-strong);
+  box-shadow: 0 24px 60px -34px rgba(240, 80, 158, 0.7);
+}
+
+.project-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.project-card-title {
+  font-size: 1.12rem;
+  font-family: var(--font-mono);
+}
+
+.project-card-link {
+  color: var(--fg);
+}
+
+.project-card-link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.project-card:hover .project-card-link {
+  color: var(--magenta);
+}
+
+.project-card-desc {
+  color: var(--fg-dim);
+  font-size: 0.92rem;
+  line-height: 1.7;
+}
+
+.project-card-links {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: auto;
+  padding-top: 6px;
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+}
+
+.project-card-links a {
+  color: var(--fg-faint);
+}
+
+.project-card-links a:hover {
+  color: var(--cyan);
+}
+
+/* ── 分页 ──────────────────────────────────────────────────────────────── */
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  margin-top: 40px;
+  padding-top: 22px;
+  border-top: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: 0.82rem;
+}
+
+.page-link {
+  padding: 7px 14px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--fg-dim);
+  transition: border-color 0.16s ease, color 0.16s ease;
+}
+
+.page-link:hover {
+  color: var(--cyan);
+  border-color: var(--cyan);
+}
+
+.page-link.is-disabled {
+  color: var(--fg-faint);
+  opacity: 0.45;
+}
+
+.page-info {
+  color: var(--fg-faint);
+}

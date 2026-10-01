@@ -1,0 +1,13 @@
+{{- /*
+  文章目录。
+
+  .TableOfContents 在没有标题时也会返回 "<nav id=\"TableOfContents\"></nav>"，
+  所以不能用 with 判断；改看 .Fragments.Headings，它才是「有没有标题」的真实来源。
+  https://gohugo.io/methods/page/fragments/
+*/ -}}
+{{- with .Fragments.Headings }}
+<aside class="toc" aria-label="目录">
+  <p class="toc-heading">目录</p>
+  {{ $.TableOfContents }}
+</aside>
+{{- end -}}

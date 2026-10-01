@@ -1,0 +1,107 @@
+# ─────────────────────────────────────────────────────────────────────────────
+#  NEXUS — 科技风个人博客
+#
+#  TOML 作用域提醒：`[table]` 之后的所有裸键都属于该表。
+#  所有顶层标量必须写在第一个 `[table]` 之前，否则会静默变成表内字段。
+# ─────────────────────────────────────────────────────────────────────────────
+
+baseURL = 'https://example.org/'
+title = 'NEXUS'
+theme = 'nexus'
+
+locale = 'zh-cn'
+defaultContentLanguage = 'zh-cn'
+timeZone = 'Asia/Shanghai'
+
+# 中文按字计数，摘要与字数统计才有意义
+hasCJKLanguage = true
+summaryLength = 70
+
+enableRobotsTXT = true
+enableGitInfo = true
+
+# ── 参数 ─────────────────────────────────────────────────────────────────────
+[params]
+  tagline = '系统 · 代码 · 工程笔记'
+  description = 'NEXUS 是一个关于分布式系统、编程语言与工程实践的个人技术博客：记录可复现的实验、源码阅读笔记，以及那些文档里没写的坑。'
+  author = 'Your Name'
+  authorRole = '后端工程师 / 分布式系统爱好者'
+  location = 'Hangzhou, China'
+  email = 'you@example.com'
+  startYear = 2024
+
+  # 中文日期用显式布局：`:date_long` 这类本地化 token 对 zh-CN 会退回英文
+  dateFormat = '2006年1月2日'
+  listDateFormat = '2006-01-02'
+
+  # 社交链接（有序列表，顺序即显示顺序）
+  [[params.social]]
+    name = 'GitHub'
+    icon = 'github'
+    url = 'https://github.com/yourname'
+  [[params.social]]
+    name = 'X'
+    icon = 'x'
+    url = 'https://x.com/yourname'
+  [[params.social]]
+    name = 'Email'
+    icon = 'mail'
+    url = 'mailto:you@example.com'
+  [[params.social]]
+    name = 'RSS'
+    icon = 'rss'
+    url = '/index.xml'
+
+  # 首页终端卡片里逐行打印的文字
+  [params.hero]
+    prompt = '~'
+    lines = [
+      'whoami',
+      'Your Name — 后端工程师，写分布式系统与编译器',
+      'cat focus.txt',
+      '一致性协议 · 存储引擎 · 可观测性 · 开发者体验',
+    ]
+
+# ── 菜单 ─────────────────────────────────────────────────────────────────────
+[[menus.main]]
+  name = '首页'
+  pageRef = '/'
+  weight = 10
+[[menus.main]]
+  name = '文章'
+  pageRef = '/posts'
+  weight = 20
+[[menus.main]]
+  name = '项目'
+  pageRef = '/projects'
+  weight = 30
+[[menus.main]]
+  name = '标签'
+  pageRef = '/tags'
+  weight = 40
+[[menus.main]]
+  name = '关于'
+  pageRef = '/about'
+  weight = 50
+
+# ── 日期来源：优先读 git 提交，而不是手写字段 ─────────────────────────────────
+[frontmatter]
+  lastmod = [':git', 'lastmod', 'date']
+  date = ['date', ':git']
+
+# ── Markdown ─────────────────────────────────────────────────────────────────
+[markup]
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      # 允许正文里写原生 HTML（本站内容全部由站点作者维护）
+      unsafe = true
+  [markup.highlight]
+    # 类名模式：配合 gen chromastyles 生成的 assets/css/syntax.css
+    noClasses = false
+    style = 'tokyonight-night'
+    lineNumbersInTable = true
+    tabWidth = 2
+  [markup.tableOfContents]
+    startLevel = 2
+    endLevel = 3
+    ordered = false

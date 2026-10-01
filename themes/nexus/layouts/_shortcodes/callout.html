@@ -1,0 +1,18 @@
+{{- /*
+  提示框短代码：callout。参数 type（info｜tip｜warn｜danger，默认 info）与 title。
+
+  用「标准标记」调用（尖括号那一对分隔符）：该形式在 Markdown 渲染之后执行，
+  .Inner 拿到的是未渲染文本，所以必须显式 markdownify，
+  输出的形态才完全可预测。调用写法见 README.md，正文实例见 content/about.md。
+  https://gohugo.io/content-management/shortcodes/#notation
+
+  注意：不要在这个注释里写出转义后的短代码写法——其中的星号加斜杠会提前
+  结束 Go 模板注释，模板在 1:1 处直接解析失败。
+*/ -}}
+{{- $type := .Get "type" | default "info" -}}
+{{- $labels := dict "info" "说明" "tip" "提示" "warn" "注意" "danger" "警告" -}}
+{{- $title := .Get "title" | default (index $labels $type) | default "说明" -}}
+<aside class="callout callout-{{ $type }}">
+  <p class="callout-title">{{ $title }}</p>
+  <div class="callout-body">{{ .Inner | markdownify }}</div>
+</aside>

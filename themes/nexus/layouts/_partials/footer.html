@@ -1,0 +1,41 @@
+{{- $author := site.Params.author | default site.Title -}}
+<div class="wrap footer-inner">
+  <div class="footer-brand">
+    <p class="footer-title">{{ site.Title }}</p>
+    {{- with site.Params.tagline }}<p class="footer-tagline">{{ . }}</p>{{ end }}
+    {{- with site.Params.location }}<p class="footer-location">{{ . }}</p>{{ end }}
+  </div>
+
+  <div class="footer-cols">
+    <div class="footer-col">
+      <p class="footer-heading">导航</p>
+      {{- partial "menu.html" (dict "menuID" "main" "page" . "class" "footer-menu") }}
+    </div>
+    {{- with site.Params.social }}
+    <div class="footer-col">
+      <p class="footer-heading">联系</p>
+      <ul class="social">
+        {{- range . }}
+        <li>
+          <a href="{{ .url }}"{{ if not (hasPrefix .url "mailto:") }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
+        </li>
+        {{- end }}
+      </ul>
+    </div>
+    {{- end }}
+  </div>
+</div>
+
+<div class="wrap footer-base">
+  <p class="footer-copy">
+    © {{ with site.Params.startYear }}{{ if lt . now.Year }}{{ . }}–{{ end }}{{ end }}{{ now.Year }} {{ $author }}
+  </p>
+  <p class="footer-meta">
+    <span>Hugo {{ hugo.Version }}</span>
+    <a href="{{ "sitemap.xml" | relURL }}">站点地图</a>
+    <a href="{{ "index.xml" | relURL }}">RSS</a>
+    {{- with .GitInfo }}
+    <span title="{{ .Subject }}（{{ .AuthorName }}）">提交 {{ .AbbreviatedHash }}</span>
+    {{- end }}
+  </p>
+</div>
