@@ -69,7 +69,7 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 ├── content/
 │   ├── _index.md              # 首页（正文会渲染在 hero 下方）
 │   ├── about.md               # /about/
-│   ├── posts/                 # /posts/ —— 7 篇文章 + _index.md
+│   ├── posts/                 # /posts/ —— 2 篇文章 + _index.md
 │   └── projects/              # /projects/ —— 6 个项目 + _index.md
 ├── layouts/
 │   └── baseof.html            # ★ 契约层：骨架与块名，见下一节
@@ -82,7 +82,7 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 │   │   ├── home.html  page.html  section.html  taxonomy.html  term.html
 │   │   ├── 404.html  robots.txt
 │   │   ├── _partials/         # head / header / footer / menu / 卡片 / 目录 …
-│   │   └── _shortcodes/       # callout、terminal
+│   │   └── _shortcodes/       # callout
 │   └── assets/
 │       ├── css/               # base + components/*，外加生成的 syntax.css
 │       └── js/main.js         # 导航、复制按钮、进度条、目录高亮
@@ -102,14 +102,16 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 | 50 | [云枢 ERP 演示页](content/projects/erp-demo.md) | `wip` | 本地 |
 | 60 | [剧本分镜分析脚本](content/projects/script-analysis.md) | `wip` | 本地 |
 
-`content/posts/` 共 7 篇，按日期倒序。其中两篇是项目实践的正文：
+`content/posts/` 共 2 篇，按日期倒序，都是项目实践的正文：
 
 - [E 盘开源体检](content/posts/open-source-audit.md)（2026-10-03）—— 开源判据与三档清单的方法论
 - [让代理维护知识库](content/posts/nova-knowledge-base.md)（2026-09-25）—— Nova 的分层设计与三条约束
 
-> 站点内容经历过一次**占位符替换**：早期的 4 个项目页（`tracelens` / `quincy` / `helios` /
-> `dsh-tools`）和全部作者身份字段都是虚构示例，现已替换为真实项目与 `koibunny` 身份。
-> 剩下 6 篇技术长文仍是示例内容，页面上的实测数字不是真实测量结果，发布前需要逐篇处理。
+> 站点内容经历过两次清理：早期的 4 个项目页（`tracelens` / `quincy` / `helios` / `dsh-tools`）
+> 与全部作者身份字段是虚构示例，已替换为真实项目与 `koibunny` 身份；
+> 另有 6 篇骨架阶段写的示例长文（eBPF、Go 泛型、LSM-Tree、Multi-Paxos、CI 可观测性、Raft 选型）
+> 已整体删除——它们页面上的实测数字与故障时间线都是构造的，不对应真实经历。
+> 当前 `posts/` 里剩下的内容全部对应真实项目与实践。
 
 ### 为什么 `layouts/` 只有一个文件
 
@@ -168,10 +170,11 @@ hugo new content projects/my-project.md    # 用 archetypes/projects.md
 
 ## 短代码
 
-两个短代码都用**标准标记**（尖括号形式）调用。该形式在 Markdown 渲染之后执行，
-`.Inner` 拿到的是未渲染文本，所以模板里显式走了 `markdownify`，输出形态可预测。
+主题现在只提供**一个**短代码：`callout`。它用**标准标记**（尖括号形式）调用——
+该形式在 Markdown 渲染之后执行，`.Inner` 拿到的是未渲染文本，
+所以模板里显式走了 `markdownify`，输出形态可预测。
 
-提示框，`type` 可选 `info`（默认）、`tip`、`warn`、`danger`：
+`type` 可选 `info`（默认）、`tip`、`warn`、`danger`：
 
 ```text
 {{< callout type="warn" title="标题可选" >}}
@@ -179,16 +182,12 @@ hugo new content projects/my-project.md    # 用 archetypes/projects.md
 {{< /callout >}}
 ```
 
-终端块，首字符为 `$` 的行渲染成「提示符 + 命令」，其余行渲染成输出：
-
-```text
-{{< terminal title="cargo test" >}}
-$ cargo test --test recovery
-running 12 tests
-test result: ok. 12 passed; 0 failed
-{{< /terminal >}}
-```
-
+> 曾经还有一个 `terminal` 短代码（把 `$` 开头的行渲染成提示符 + 命令），
+> 它只在骨架阶段的示例文章里用过。那批文章删除后没有任何页面引用它，
+> `--printUnusedTemplates` 会把「模板未被使用」报成警告、并被 `--panicOnWarning` 升级为失败，
+> 所以模板文件已删除。首页那个终端卡片用的是 `home.html` 里的内联标记 + `home.css`，
+> 与这个短代码无关，不受影响。需要时按 git 历史 `9c494da` 之前的版本恢复即可。
+>
 > 写文档时注意：如果要在**正文里展示**短代码写法本身，必须转义成
 > `{{</* callout */>}}` 这样的形式。Hugo 在 Markdown 之前就扫描短代码，
 > 代码围栏不提供保护——一个未转义的 `{{<` 会让整个构建失败。
@@ -273,27 +272,32 @@ hugo v0.167.0-3fff6fb5c267dacb26280c78dbe8c344054249c8+extended windows/amd64
 （`resources.Get` / `resources.Concat` / `minify` / `fingerprint`），没有用 `css.Build` 或 SCSS，
 所以标准版 Hugo 也能构建。`min` 的依据是 0.158.0 起 `languageCode` 改名 `locale` 且 `.Locale` 可用。
 
-本仓库通过的确切检查（2026-10-03 内容改为真实项目后重跑）：
+本仓库通过的确切检查（2026-10-03 删除示例文章后重跑）：
 
 | 检查 | 命令 | 结果 |
 | --- | --- | --- |
-| 严格构建 | `hugo --ignoreCache --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings --templateMetrics` | 退出码 0，0 警告、0 路径冲突、0 未使用模板 |
-| 内容清单 | `hugo list all` | 18 行（1 行表头 + 17 个内容页），与 `content/` 里 17 个 `.md` 一一对应 |
-| 产物齐全 | 逐个核对 `public/` | 14/14 非索引页都有对应 `index.html` |
+| 严格构建 | `hugo --ignoreCache --cleanDestinationDir --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings` | 退出码 0，0 警告、0 路径冲突、0 未使用模板 |
+| 内容清单 | `hugo list all` | 13 行（1 行表头 + 12 个内容页），与 `content/` 里 12 个 `.md` 一一对应 |
+| 产物齐全 | 逐个核对 `public/` | 9/9 非索引内容页都有对应 `index.html` |
 | 生产环境 | `hugo`（默认 `production`） | `robots.txt` 为 `Allow: /`，页面 `index, follow` |
 | 开发环境 | `hugo -e development` | `robots.txt` 为 `Disallow: /`，页面 `noindex, nofollow` |
-| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 44 个 HTML、46 个站内 URL，0 断链 |
+| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 22 个 HTML、24 个站内 URL，0 断链 |
 | 结构化数据 | 用真实 JSON 解析器解析 JSON-LD | 解析通过：首页 `@type=WebSite`，文章与项目页 `@type=BlogPosting` |
 | 短代码转义 | 在 `content/` 里搜可疑分隔符写法与占位字面量 | 无可疑写法，无 `HAHAHUGOSHORTCODE` |
 | 身份占位符 | 在 `public/` 全文搜 `Your Name` / `yourname` / `you@example` | 0 命中 |
+
+删除内容之后，有两件事必须一起做，这次两个都实际踩到了：
+
+1. **加 `--cleanDestinationDir` 重新构建**。普通构建**不会**移除 `public/` 下已生成的旧目录，
+   被删的页面会继续在线；
+2. **看警告数是否为零**。删掉 6 篇示例文章后，主题里的 `terminal` 短代码失去全部引用，
+   `--printUnusedTemplates` 报出「模板未被使用」，`--panicOnWarning` 把它升级成构建失败（退出码 2）。
+   判据是：**删内容之后警告数必须为零，否则说明有东西只被被删页面引用着。**
 
 断链检查有两处容易做错，记录一下判据：
 
 - 站内链接在产物里带 `baseURL` 路径前缀（`/tech-blog/...`），比较前必须去掉，否则全部误报；
 - 中文标签/分类目录在 `href` 里是百分号编码的，比较前必须 `[uri]::UnescapeDataString` 解码。
-
-清理旧产物必须显式加 `--cleanDestinationDir`：删掉内容页之后，普通构建**不会**移除
-`public/` 下已经生成的旧目录，页面会继续在线。
 
 `assets/css/syntax.css` 是生成的，不要手改。换了 `[markup.highlight] style` 之后重新生成：
 
@@ -312,10 +316,9 @@ hugo gen chromastyles --style tokyonight-night > themes/nexus/assets/css/syntax.
 - **只做深色**。没有明暗切换开关，`color-scheme` 固定为 `dark`。
 - **没有站内搜索**。静态站点要做搜索需要额外的索引文件或第三方服务，当前刻意留空。
 - **没有图片资源**。视觉全部由 CSS 渐变与几何图形构成，所以仓库里没有二进制素材。
-- **有 6 篇文章仍是示例内容**。`posts/` 下的 eBPF、Go 泛型、LSM-Tree、Multi-Paxos、
-  CI 可观测性、Raft 选型这 6 篇是站点骨架阶段写的示例长文，里面的实测数字与故障时间线
-  都是构造的，不对应真实经历。它们是模板演示，不是事实陈述——保留是为了压测模板的排版与
-  目录、代码高亮、短代码组合，发布前应逐篇替换为真实内容或删除。
+- **文章数量少**。`posts/` 目前只有 2 篇，都是 2026-09 / 10 写的项目实践正文。
+  骨架阶段那 6 篇示例长文已删除，因为其中的实测数字与故障时间线是构造的，
+  留着等于把虚构内容混进真实项目介绍里。文章要重新积累。
 - **构建环境已修复，但不是零成本**。`%LOCALAPPDATA%\Temp\hugo_cache` 目前已预建，
   `hugo` 可直接运行；如果该目录被清理工具删掉，需要按「构建环境备注」重建一次。
 - **`categories` 分类法已启用但页脚没有入口**。术语页本身会生成并进入 sitemap；
