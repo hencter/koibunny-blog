@@ -26,6 +26,32 @@ E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe --gc --minify
 
 如果 `hugo` 已经在你自己的 PATH 上，把上面的完整路径换成 `hugo` 即可。
 
+### 这台机器上的构建环境备注（重要）
+
+`hugo` 在本机**不带参数**运行会直接崩溃，发生在加载配置阶段：
+
+```text
+ERROR failed to load config: mkdir C:\Users\<用户名>\AppData\Local\Temp\hugo_cache: Access is denied.
+```
+
+原因是 Hugo 的 `GetCacheDir` 推导出的系统临时目录子路径被拒绝创建。
+这个路径**不能用 `--cacheDir` 覆盖**——实测它会与 Hugo 内部的其它缓存子目录拼接成
+`.hugo_cache\<站点名>` 这样的相对路径，然后报 `must resolve to an absolute directory`。
+
+三种已验证的绕过方式，任选其一：
+
+```powershell
+# 1) 临时目录指向可写位置（临时生效，推荐日常使用）
+$env:TMPDIR = 'E:\DeepSeekHarnessWork\.tooling\hugotmp'
+
+# 2) 命令行显式给出站点目录与缓存目录（两者都要绝对路径）
+hugo --source 'E:\DeepSeekHarnessWork\博客网站' --cacheDir 'E:\DeepSeekHarnessWork\.tooling\hugocache'
+
+# 3) 修复 %LOCALAPPDATA%\Temp 下的 ACL 后，即可直接用 `hugo`
+```
+
+GitHub Actions 跑在 Linux 上，不受这条影响；README 末尾的验证记录是按方式 1 得到的。
+
 预览地址默认是 <http://localhost:1313/>。
 
 > `hugo server` 的运行环境是 `development`，页面会带 `noindex, nofollow`，
@@ -45,8 +71,8 @@ E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe --gc --minify
 ├── content/
 │   ├── _index.md              # 首页（正文会渲染在 hero 下方）
 │   ├── about.md               # /about/
-│   ├── posts/                 # /posts/ —— 文章
-│   └── projects/              # /projects/ —— 项目
+│   ├── posts/                 # /posts/ —— 7 篇文章 + _index.md
+│   └── projects/              # /projects/ —— 6 个项目 + _index.md
 ├── layouts/
 │   └── baseof.html            # ★ 契约层：骨架与块名，见下一节
 ├── static/
@@ -64,6 +90,28 @@ E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe --gc --minify
 │       └── js/main.js         # 导航、复制按钮、进度条、目录高亮
 └── .github/workflows/hugo.yml # GitHub Pages 部署
 ```
+
+### 项目与文章清单
+
+`content/projects/`（按 `weight` 排序，数字小的在前）：
+
+| weight | 页面 | status | 仓库 |
+| --- | --- | --- | --- |
+| 10 | [Nova 知识库](content/projects/nova.md) | `active` | `hencter/Nova`（上游） |
+| 20 | [Agent 工作流工具集](content/projects/agent-toolkit.md) | `wip` | 待拆仓 |
+| 30 | [AI Video Studio](content/projects/ai-video-studio.md) | `wip` | 本地 |
+| 40 | [AI 辅助做游戏](content/projects/ai-games.md) | `active` | `0127yy-cloud/ai-games` |
+| 50 | [云枢 ERP 演示页](content/projects/erp-demo.md) | `wip` | 本地 |
+| 60 | [剧本分镜分析脚本](content/projects/script-analysis.md) | `wip` | 本地 |
+
+`content/posts/` 共 7 篇，按日期倒序。其中两篇是项目实践的正文：
+
+- [E 盘开源体检](content/posts/open-source-audit.md)（2026-10-03）—— 开源判据与三档清单的方法论
+- [让代理维护知识库](content/posts/nova-knowledge-base.md)（2026-09-25）—— Nova 的分层设计与三条约束
+
+> 站点内容经历过一次**占位符替换**：早期的 4 个项目页（`tracelens` / `quincy` / `helios` /
+> `dsh-tools`）和全部作者身份字段都是虚构示例，现已替换为真实项目与 `koibunny` 身份。
+> 剩下 6 篇技术长文仍是示例内容，页面上的实测数字不是真实测量结果，发布前需要逐篇处理。
 
 ### 为什么 `layouts/` 只有一个文件
 
@@ -161,7 +209,7 @@ test result: ok. 12 passed; 0 failed
 | `[params] description` | 首页与默认 meta description |
 | `[params] author` / `authorRole` / `location` / `email` | 页脚、JSON-LD、关于页署名 |
 | `[params] startYear` | 页脚版权起始年份 |
-| `[params.social]` | 有序数组，顺序即显示顺序；`icon` 字段当前未使用（用文字链接） |
+| `[params.social]` | 有序数组，顺序即显示顺序；`icon` 字段当前未使用（用文字链接）。**只放真实存在的账号**：模板会原样输出链接，占位地址等于给读者一个 404 |
 | `[params.hero.lines`] | 首页终端卡片逐行打印的文字，偶数下标渲染成命令、奇数下标渲染成输出 |
 | `[params] ogImage` | 社交分享图路径，相对 `static/`，用 `absURL` 转绝对地址 |
 
@@ -227,18 +275,27 @@ hugo v0.167.0-3fff6fb5c267dacb26280c78dbe8c344054249c8+extended windows/amd64
 （`resources.Get` / `resources.Concat` / `minify` / `fingerprint`），没有用 `css.Build` 或 SCSS，
 所以标准版 Hugo 也能构建。`min` 的依据是 0.158.0 起 `languageCode` 改名 `locale` 且 `.Locale` 可用。
 
-本仓库通过的确切检查：
+本仓库通过的确切检查（2026-10-03 内容改为真实项目后重跑）：
 
 | 检查 | 命令 | 结果 |
 | --- | --- | --- |
 | 严格构建 | `hugo --ignoreCache --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings --templateMetrics` | 退出码 0，0 警告、0 路径冲突、0 未使用模板 |
-| 内容清单 | `hugo list all` | 13 行，与 `content/` 里 13 个页面一一对应 |
-| 产物齐全 | 逐个核对 `public/` | 13/13 内容页都有对应 `index.html` |
+| 内容清单 | `hugo list all` | 18 行（1 行表头 + 17 个内容页），与 `content/` 里 17 个 `.md` 一一对应 |
+| 产物齐全 | 逐个核对 `public/` | 14/14 非索引页都有对应 `index.html` |
 | 生产环境 | `hugo`（默认 `production`） | `robots.txt` 为 `Allow: /`，页面 `index, follow` |
 | 开发环境 | `hugo -e development` | `robots.txt` 为 `Disallow: /`，页面 `noindex, nofollow` |
-| 内部链接 | 自写检查脚本遍历 `public/` | 35 个 HTML、38 个站内 URL，0 断链 |
-| 结构化数据 | 用真实 JSON 解析器解析 JSON-LD | 解析通过，`@type=BlogPosting` |
-| 短代码转义 | 在 `content/` 里搜未转义分隔符与占位字面量 | 无未转义写法，无 `HAHAHUGOSHORTCODE` |
+| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 44 个 HTML、46 个站内 URL，0 断链 |
+| 结构化数据 | 用真实 JSON 解析器解析 JSON-LD | 解析通过：首页 `@type=WebSite`，文章与项目页 `@type=BlogPosting` |
+| 短代码转义 | 在 `content/` 里搜可疑分隔符写法与占位字面量 | 无可疑写法，无 `HAHAHUGOSHORTCODE` |
+| 身份占位符 | 在 `public/` 全文搜 `Your Name` / `yourname` / `you@example` | 0 命中 |
+
+断链检查有两处容易做错，记录一下判据：
+
+- 站内链接在产物里带 `baseURL` 路径前缀（`/tech-blog/...`），比较前必须去掉，否则全部误报；
+- 中文标签/分类目录在 `href` 里是百分号编码的，比较前必须 `[uri]::UnescapeDataString` 解码。
+
+清理旧产物必须显式加 `--cleanDestinationDir`：删掉内容页之后，普通构建**不会**移除
+`public/` 下已经生成的旧目录，页面会继续在线。
 
 `assets/css/syntax.css` 是生成的，不要手改。换了 `[markup.highlight] style` 之后重新生成：
 
@@ -257,6 +314,13 @@ hugo gen chromastyles --style tokyonight-night > themes/nexus/assets/css/syntax.
 - **只做深色**。没有明暗切换开关，`color-scheme` 固定为 `dark`。
 - **没有站内搜索**。静态站点要做搜索需要额外的索引文件或第三方服务，当前刻意留空。
 - **没有图片资源**。视觉全部由 CSS 渐变与几何图形构成，所以仓库里没有二进制素材。
+- **有 6 篇文章仍是示例内容**。`posts/` 下的 eBPF、Go 泛型、LSM-Tree、Multi-Paxos、
+  CI 可观测性、Raft 选型这 6 篇是站点骨架阶段写的示例长文，里面的实测数字与故障时间线
+  都是构造的，不对应真实经历。它们是模板演示，不是事实陈述——保留是为了压测模板的排版与
+  目录、代码高亮、短代码组合，发布前应逐篇替换为真实内容或删除。
+- **本机构建需要绕过系统临时目录**。见「这台机器上的构建环境备注」：该机器上
+  `%LOCALAPPDATA%\Temp` 下的 `hugo_cache` 被拒绝创建，需要设 `TMPDIR`、给
+  `--source` + `--cacheDir`，或修复 ACL。
 - **`categories` 分类法已启用但页脚没有入口**。术语页本身会生成并进入 sitemap；
   如果不想要，在 `hugo.toml` 里设 `disableKinds = ['taxonomy', 'term']` 会同时删掉 `tags` 页。
 - **`.Date` 一律用 `not .IsZero` 守卫**。`time.Time` 是结构体，`with .Date` 永远为真，
