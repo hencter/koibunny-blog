@@ -175,5 +175,6 @@ ring buffer 会成为瓶颈。上线前务必先用 `--duration 30s` 在小流�
 eBPF 在这里的价值不是「比 tcpdump 更快」，而是**能同时看到包和产生包的内核状态**。
 重传原因、拥塞窗口、socket 归属这些信息，抓包永远拿不到。
 
-这套采集器的完整实现（包括 `sock_ops` 清理和指标导出）在 [tracelens](/projects/tracelens/) 项目里。
-它采集的数据怎么进 CI 做回归，可以看 [把可观测性做进 CI](/posts/observability-in-ci/)。
+这套采集器的完整实现里还有两块没写进本文：`sock_ops` 程序的生命周期清理，
+以及把内核事件导出成 OpenTelemetry 指标的适配层。它采集的数据怎么进 CI 做回归，
+可以看 [把可观测性做进 CI](/posts/observability-in-ci/)。
