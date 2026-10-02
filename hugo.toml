@@ -6,8 +6,10 @@
 # ─────────────────────────────────────────────────────────────────────────────
 
 # GitHub Pages 项目站点地址：https://<用户>.github.io/<仓库>/
-# 本地 `hugo server` 会自动覆盖它，不需要为此改动
-baseURL = 'https://0127yy-cloud.github.io/tech-blog/'
+# 本地 `hugo server` 会自动覆盖它，不需要为此改动。
+# 改 GitHub 用户名或仓库名后必须同步这里：Pages 不会把旧地址重定向过来（旧地址直接 404），
+# 而 canonical / og:url / og:image / sitemap 全部由它生成。
+baseURL = 'https://koibunny.github.io/tech-blog/'
 title = 'NEXUS'
 theme = 'nexus'
 
@@ -43,7 +45,7 @@ enableGitInfo = true
   [[params.social]]
     name = 'GitHub'
     icon = 'github'
-    url = 'https://github.com/yourname'
+    url = 'https://github.com/koibunny'
   [[params.social]]
     name = 'X'
     icon = 'x'

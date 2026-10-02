@@ -153,7 +153,7 @@ test result: ok. 12 passed; 0 failed
 
 | 键 | 作用 |
 | --- | --- |
-| `baseURL` | 已设为线上地址 `https://0127yy-cloud.github.io/tech-blog/`。换域名或改仓库名后必须同步，否则 canonical / og:url / sitemap 全指错 |
+| `baseURL` | 已设为线上地址 `https://koibunny.github.io/tech-blog/`。**改 GitHub 用户名或仓库名后必须同步**：Pages 不会把旧地址重定向过来（旧地址直接 404），而 canonical / og:url / og:image / sitemap 全由它生成 |
 | `title` / `[params] tagline` | 站点名与副标题 |
 | `[params] description` | 首页与默认 meta description |
 | `[params] author` / `authorRole` / `location` / `email` | 页脚、JSON-LD、关于页署名 |
@@ -188,8 +188,8 @@ test result: ok. 12 passed; 0 failed
 
 ## 部署到 GitHub Pages
 
-- 仓库：<https://github.com/0127yy-cloud/tech-blog>
-- 线上地址：**<https://0127yy-cloud.github.io/tech-blog/>**
+- 仓库：<https://github.com/koibunny/tech-blog>
+- 线上地址：**<https://koibunny.github.io/tech-blog/>**
 
 推送到 `main` 分支即自动构建并发布，工作流是 `.github/workflows/hugo.yml`：
 
