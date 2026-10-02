@@ -7,20 +7,32 @@
 
   @example {{ partial "menu.html" (dict "menuID" "main" "page" .) }}
 
+  菜单名到图标的映射写在这里而不是 hugo.toml：像素风顶栏需要每个入口前面有个方块图标，
+  但配置里的 [[menus.main]] 保持原样（README 里那张配置表不用改）。
+  没在映射表里的菜单名回退到 ▤，所以新增菜单入口不会渲染成空白。
+
   注意 IsMenuCurrent 的签名：PAGE.IsMenuCurrent MENU MENUENTRY，
   第一个参数是菜单项自己的 .Menu 对象，不是菜单名字符串。
   https://gohugo.io/functions/menus/
 */ -}}
 {{- $page := .page -}}
 {{- $class := .class | default "menu" -}}
+{{- $icons := dict
+  "首页" "⌂"
+  "笔记文章" "▤"
+  "项目实践" "▣"
+  "标签" "🏷"
+  "关于我" "🐰"
+-}}
 {{- with index site.Menus .menuID -}}
 <ul class="{{ $class }}">
   {{- range . -}}
     {{- $active := or ($page.IsMenuCurrent .Menu .) ($page.HasMenuCurrent .Menu .) -}}
     {{- $url := .URL -}}
     {{- with .Page }}{{ $url = .RelPermalink }}{{ end -}}
+    {{- $icon := index $icons .Name | default "▤" -}}
     <li class="menu-item{{ if $active }} is-active{{ end }}">
-      <a href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}>{{ .Name }}</a>
+      <a href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}><span class="menu-icon" aria-hidden="true">{{ $icon }}</span>{{ .Name }}</a>
     </li>
   {{- end -}}
 </ul>

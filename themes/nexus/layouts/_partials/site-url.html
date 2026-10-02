@@ -1,0 +1,50 @@
+{{- /*
+  把一个「站点内地址」解析成带 baseURL 前缀的绝对路径。
+
+  @context {site}   site     站点对象，例如 site
+  @context {string} pageRef  可选，内容页引用，例如 "posts" 或 "tags"
+  @context {string} output   可选，输出格式名，用于取 rss / sitemap 这类非 HTML 产物，例如 "rss"
+  @context {string} file     可选，static/ 下的文件名，例如 "favicon.svg"
+
+  @example {{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}
+  @example {{ partial "site-url.html" (dict "site" site "output" "rss") }}
+  @example {{ partial "site-url.html" (dict "site" site "file" "favicon.svg") }}
+
+  为什么需要它：Hugo 的 `relURL` 对 "/posts/" 这种以斜杠开头的入参
+  直接原样返回，**不会**拼上 baseURL 里的路径部分。本地 `hugo server`
+  的 baseURL 没有路径（http://localhost:1313/），所以问题看不出来；
+  但线上是项目站点 https://<用户>.github.io/tech-blog/，
+  裸写的 /posts/ 会跳到域名根目录并 404。
+
+  为什么收 site 而不是 page：首页调用点常常在 `range` 里面，
+  那里 `.` 是 page.Pages（页面集合）而不是 page，取不到 .Site。
+  收 site 就没有这个歧义。
+
+  三种入参走三条路，取到的都是 Hugo 自己算出来的地址：
+    pageRef → 内容页的 .RelPermalink（菜单本来就用它，行为一致）
+    output  → 当前站点首页对应格式的 .Permalink（rss 只在 home/section/
+              taxonomy/term 上有，统一从首页取，避免调用方所在页面没有该格式）
+    file    → relURL 拼静态文件（静态文件本来就不参与 Hugo 的地址推导）
+
+  找不到对应页面/格式时返回空串，调用方用 with 跳过渲染 —— 不猜地址。
+*/ -}}
+{{- $site := .site -}}
+{{- $url := "" -}}
+
+{{- with .pageRef -}}
+  {{- with $site.GetPage . -}}
+    {{- $url = .RelPermalink -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with .output -}}
+  {{- with $site.Home.OutputFormats.Get . -}}
+    {{- $url = .Permalink -}}
+  {{- end -}}
+{{- end -}}
+
+{{- with .file -}}
+  {{- $url = . | relURL -}}
+{{- end -}}
+
+{{- return $url -}}

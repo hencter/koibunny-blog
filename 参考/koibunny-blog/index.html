@@ -1,0 +1,198 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="koibunny 的 AI 博客：记录能跑起来的实验、源码阅读结论和踩坑笔记。" />
+  <title>koibunny 的 AI 博客</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="site-header">
+      <a class="brand" href="#home" aria-label="koibunny 首页">
+        <span class="brand-badge">🐰</span>
+        <span class="brand-text">koibunny 的 AI 博客</span>
+      </a>
+
+      <button class="menu-toggle" id="menuToggle" aria-label="打开导航" aria-expanded="false">☰</button>
+
+      <nav class="main-nav" id="mainNav" aria-label="主导航">
+        <a class="active" href="#home"><span>⌂</span>首页</a>
+        <a href="#articles"><span>▤</span>笔记文章</a>
+        <a href="#projects"><span>▣</span>项目实践</a>
+        <a href="#tools"><span>🔧</span>工具推荐</a>
+        <a href="#roadmap"><span>🗺</span>学习路径</a>
+        <a href="#about"><span>🐰</span>关于我</a>
+      </nav>
+
+      <label class="search-box" aria-label="搜索文章">
+        <span>⌕</span>
+        <input id="searchInput" type="search" placeholder="搜索文章…" />
+      </label>
+    </header>
+
+    <main>
+      <section class="hero" id="home">
+        <div class="hero-art" aria-hidden="true"></div>
+
+        <div class="hero-copy">
+          <p class="eyebrow">KOIBUNNY · AI LEARNING LAB</p>
+          <h1>
+            <span>koibunny 的 AI 博客</span>
+            把 <em>AI</em> 说明白，<br />
+            也把 <strong>实验</strong> 跑起来
+          </h1>
+
+          <p class="hero-intro">
+            这里记录我自己会回头查的笔记：能跑起来的实验、读过源码后的结论，以及踩过的坑。
+          </p>
+
+          <div class="note-banner">
+            <span>💡</span>
+            <p>不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。</p>
+          </div>
+
+          <div class="hero-actions">
+            <a class="pixel-button primary" href="#articles">▣ 看最新笔记 →</a>
+            <a class="pixel-button secondary" href="#about">🐰 关于 koibunny</a>
+          </div>
+        </div>
+
+        <aside class="hero-rail" aria-label="博客内容特色">
+          <div><span>⚙</span><b>可复现实验</b></div>
+          <div><span>📖</span><b>源码阅读结论</b></div>
+          <div><span>⚠</span><b>踩坑记录</b></div>
+          <div><span>💡</span><b>把为什么讲清楚</b></div>
+        </aside>
+      </section>
+
+      <section class="content-panel" id="articles">
+        <div class="section-heading">
+          <div>
+            <p class="section-kicker">LATEST NOTES</p>
+            <h2>🌱 最新文章</h2>
+          </div>
+          <a href="#articles">查看更多 →</a>
+        </div>
+
+        <div class="article-grid" id="articleGrid">
+          <article class="article-card" data-search="RAG 实验 向量检索 数据处理 项目实践">
+            <div class="card-visual visual-rag">
+              <span class="mini-rabbit">🐰</span>
+              <span class="visual-chip">RAG</span>
+            </div>
+            <div class="card-body">
+              <h3>一个能跑起来的 RAG 实验</h3>
+              <p>从零搭一个本地 RAG 应用，把数据处理、向量检索、生成与评测流程完整跑通。</p>
+              <div class="meta">
+                <span class="tag purple">实验</span>
+                <span class="tag blue">项目实践</span>
+                <span class="tag green">RAG</span>
+                <time>2026-10-01</time>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card" data-search="Agent 源码 阅读 架构 设计 GitHub">
+            <div class="card-visual visual-agent">
+              <span class="mini-rabbit">🐰</span>
+              <span class="visual-chip">AGENT</span>
+            </div>
+            <div class="card-body">
+              <h3>读完 Agent 源码后的 5 个结论</h3>
+              <p>基于真实开源项目的源码阅读，总结 Agent 架构、记忆机制和工具调用的关键点。</p>
+              <div class="meta">
+                <span class="tag orange">源码阅读</span>
+                <span class="tag blue">Agent</span>
+                <span class="tag purple">架构设计</span>
+                <time>2026-09-28</time>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card" data-search="MCP 踩坑 调试 配置 环境">
+            <div class="card-visual visual-mcp">
+              <span class="mini-rabbit">🐰</span>
+              <span class="visual-chip">MCP</span>
+            </div>
+            <div class="card-body">
+              <h3>我在接 MCP 时踩过的坑</h3>
+              <p>记录从环境配置到权限问题的完整踩坑过程，以及解决方法，避免你走同样的弯路。</p>
+              <div class="meta">
+                <span class="tag red">踩坑记录</span>
+                <span class="tag blue">MCP</span>
+                <span class="tag green">环境配置</span>
+                <time>2026-09-25</time>
+              </div>
+            </div>
+          </article>
+
+          <article class="article-card" data-search="AI 工作流 学习路径 效率 工具">
+            <div class="card-visual visual-workflow">
+              <span class="mini-rabbit">🐰</span>
+              <span class="visual-chip">FLOW</span>
+            </div>
+            <div class="card-body">
+              <h3>为什么这套 AI 工作流值得复现</h3>
+              <p>分享我日常使用的 AI 学习与实践工作流，从信息收集到动手实验，再到复用知识。</p>
+              <div class="meta">
+                <span class="tag orange">学习路径</span>
+                <span class="tag blue">工作流</span>
+                <span class="tag purple">效率工具</span>
+                <time>2026-09-20</time>
+              </div>
+            </div>
+          </article>
+        </div>
+
+        <div class="empty-state" id="emptyState" hidden>
+          🐰 没找到匹配文章，换个关键词试试。
+        </div>
+      </section>
+
+      <section class="category-row" id="projects">
+        <a class="category-card" href="#articles">
+          <span class="category-icon">⚗</span>
+          <span><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span>
+          <i>›</i>
+        </a>
+
+        <a class="category-card" href="#articles" id="tools">
+          <span class="category-icon">📖</span>
+          <span><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span>
+          <i>›</i>
+        </a>
+
+        <a class="category-card" href="#articles">
+          <span class="category-icon">🔧</span>
+          <span><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span>
+          <i>›</i>
+        </a>
+
+        <a class="category-card" href="#roadmap">
+          <span class="category-icon">🗺</span>
+          <span><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span>
+          <i>›</i>
+        </a>
+      </section>
+
+      <section class="about-panel" id="about">
+        <div class="about-rabbit">🐰</div>
+        <div>
+          <p class="section-kicker">ABOUT KOIBUNNY</p>
+          <h2>这是一个给自己长期复用的 AI 笔记库</h2>
+          <p>我更关心“为什么能工作”和“怎样复现”，而不是追逐每天的新名词。每篇内容尽量留下代码、流程、上下文和失败记录。</p>
+        </div>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <span>🐰 koibunny AI Blog</span>
+      <span>Keep learning · Keep building</span>
+    </footer>
+  </div>
+
+  <script src="./script.js"></script>
+</body>
+</html>

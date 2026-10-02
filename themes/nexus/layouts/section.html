@@ -3,7 +3,7 @@
   {{- $pages := .Pages.ByDate.Reverse -}}
   {{- if $isProject }}{{ $pages = .Pages.ByWeight }}{{ end -}}
 
-  <div class="wrap">
+  <div class="wrap page-pad">
     <header class="page-head">
       <p class="eyebrow">{{ if $isProject }}项目{{ else }}文章{{ end }}</p>
       <h1 class="page-head-title">{{ .Title }}</h1>
@@ -15,6 +15,25 @@
       {{- end }}
       <p class="page-head-meta">{{ len $pages }} 个条目</p>
     </header>
+
+    {{- /* 参考页首页那排图标方块，这里复用到列表页顶部：
+           文章列表给「全部 / 项目」两个跳转，项目列表给状态图例。 */ -}}
+    {{- if $isProject }}
+    <ul class="category-row">
+      <li class="category-card">
+        <span class="category-icon" aria-hidden="true">✔</span>
+        <span class="category-text"><b>active</b><small>在维护 · 持续提交</small></span>
+      </li>
+      <li class="category-card">
+        <span class="category-icon" aria-hidden="true">🔧</span>
+        <span class="category-text"><b>wip</b><small>进行中 · 随时会改</small></span>
+      </li>
+      <li class="category-card">
+        <span class="category-icon" aria-hidden="true">🗄</span>
+        <span class="category-text"><b>archived</b><small>已归档 · 只读留存</small></span>
+      </li>
+    </ul>
+    {{- end }}
 
     {{- if $isProject }}
     <div class="project-grid">

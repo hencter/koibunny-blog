@@ -1,0 +1,28 @@
+{{- /*
+  解析一条社交链接的地址。
+
+  @context {site}   site  站点对象
+  @context {string} url   配置里的原始地址
+
+  @example {{ $url := partial "social-url.html" (dict "site" site "url" .url) }}
+
+  为什么需要它：hugo.toml 的 [[params.social]] 里那条 RSS 写的是 '/index.xml'。
+  模板直接输出 .url 的话就是裸的根相对地址，在项目站点
+  （https://<用户>.github.io/<仓库>/）上会跳到域名根目录并 404 ——
+  本地 `hugo server` 的 baseURL 没有路径，所以预览时看不出来。
+
+  规则：以 / 开头的按站内地址解析（RSS 走 OutputFormats，其余当静态文件），
+  其他（https://、mailto: 等）原样返回。
+
+  首页 hero 和页脚两处都要用，所以放在这里而不是各写一遍。
+*/ -}}
+{{- $site := .site -}}
+{{- $url := .url -}}
+{{- if hasPrefix $url "/" -}}
+  {{- if eq $url "/index.xml" -}}
+    {{- $url = partial "site-url.html" (dict "site" $site "output" "rss") -}}
+  {{- else -}}
+    {{- $url = (strings.TrimPrefix "/" $url) | relURL -}}
+  {{- end -}}
+{{- end -}}
+{{- return $url -}}

@@ -8,6 +8,9 @@
   契约（主题必须提供）：
     partials: head.html, header.html, footer.html, scripts.html
     blocks:   main
+
+  骨架决定了一件事：整页被 `.page-shell` 包住（参考页的像素画边框就画在它身上），
+  所以主题的每一段内容都必须在 shell 内部，不能假设自己从视口边缘开始。
 */ -}}
 <!DOCTYPE html>
 <html lang="{{ site.Language.Locale }}" dir="{{ or site.Language.Direction `ltr` }}">
@@ -16,17 +19,24 @@
 </head>
 <body class="kind-{{ .Kind }}{{ if .IsHome }} is-home{{ end }}">
   <a class="skip-link" href="#main">跳到主要内容</a>
-  <div class="bg-layer" aria-hidden="true"></div>
-  <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
-  <header class="site-header">
-    {{ partial "header.html" . }}
-  </header>
-  <main id="main" class="site-main">
-    {{ block "main" . }}{{ end }}
-  </main>
-  <footer class="site-footer">
-    {{ partial "footer.html" . }}
-  </footer>
+
+  <div class="page-shell">
+    <div class="bg-layer" aria-hidden="true"></div>
+    <div class="scroll-progress" aria-hidden="true"><span data-scroll-progress></span></div>
+
+    <header class="site-header">
+      {{ partial "header.html" . }}
+    </header>
+
+    <main id="main" class="site-main">
+      {{ block "main" . }}{{ end }}
+    </main>
+
+    <footer class="site-footer">
+      {{ partial "footer.html" . }}
+    </footer>
+  </div>
+
   {{ partial "scripts.html" . }}
 </body>
 </html>

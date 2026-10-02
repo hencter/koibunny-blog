@@ -1,55 +1,97 @@
 /* ═══════════════════════════════════════════════════════════════════════════
-   footer.css — 页脚
+   footer.css — 页脚（深棕底 + 奶油字，和顶栏首尾呼应）
    ═══════════════════════════════════════════════════════════════════════════ */
 
 .site-footer {
   position: relative;
   z-index: 1;
-  border-top: 1px solid var(--line);
-  background: linear-gradient(180deg, rgba(9, 12, 22, 0.4), rgba(5, 6, 12, 0.9));
-  font-size: 0.9rem;
+  margin-top: auto;
+  color: #ffeac7;
+  background-color: var(--brown-800);
+  background-image:
+    linear-gradient(#5c3428, #4a2a20),
+    repeating-linear-gradient(90deg, transparent 0 70px, rgba(255, 255, 255, 0.04) 70px 72px);
+  border-top: 5px solid var(--brown-900);
 }
 
 .footer-inner {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
-  gap: clamp(24px, 5vw, 64px);
-  padding-block: clamp(36px, 6vw, 64px) clamp(24px, 4vw, 40px);
+  gap: clamp(22px, 4vw, 56px);
+  padding-inline: clamp(18px, 4vw, 58px);
+  padding-block: clamp(30px, 5vw, 52px) clamp(20px, 3vw, 34px);
 }
 
 .footer-title {
-  font-family: var(--font-mono);
-  font-size: 1.1rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  color: var(--fg);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 1.16rem;
+  font-weight: 900;
+  letter-spacing: 0.04em;
+  text-shadow: 2px 2px 0 #3f271d;
+}
+
+.footer-brand {
+  display: grid;
+  align-content: start;
+  gap: 2px;
+}
+
+.footer-col {
+  min-width: 0;
+}
+
+.footer-copy {
+  margin: 0;
+}
+
+.footer-badge {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  flex: none;
+  font-size: 20px;
+  background: #ffe6ba;
+  border: 2px solid var(--brown-900);
 }
 
 .footer-tagline {
-  margin-top: 8px;
-  color: var(--fg-dim);
+  margin-top: 10px;
+  color: #ffdcae;
 }
 
 .footer-location {
   margin-top: 6px;
   font-family: var(--font-mono);
-  font-size: 0.78rem;
-  color: var(--fg-faint);
+  font-size: 0.76rem;
+  color: #d9b892;
 }
 
 .footer-cols {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-  gap: 24px;
+  gap: 22px;
 }
 
 .footer-heading {
   margin-bottom: 12px;
+  padding-bottom: 7px;
   font-family: var(--font-mono);
-  font-size: 0.72rem;
+  font-size: 0.7rem;
+  font-weight: 900;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  color: var(--cyan);
+  color: var(--yellow);
+  background-image: repeating-linear-gradient(
+    90deg,
+    var(--tan) 0 6px,
+    transparent 6px 11px
+  );
+  background-repeat: no-repeat;
+  background-position: 0 100%;
+  background-size: 100% 3px;
 }
 
 .footer-menu,
@@ -65,13 +107,40 @@
   display: inline-flex;
   align-items: center;
   gap: 5px;
-  color: var(--fg-dim);
   font-size: 0.88rem;
+  color: #ffe3bd;
 }
 
 .footer-menu a:hover,
 .social a:hover {
-  color: var(--cyan);
+  color: var(--brown-900);
+  background: var(--yellow);
+  box-shadow: 2px 2px 0 var(--brown-900);
+}
+
+/* icons 字段在配置里是 'github' / 'rss' 这类标识；取首字母压成一个像素小方块，比塞 emoji 稳 */
+.social-icon {
+  display: inline-grid;
+  place-items: center;
+  width: 22px;
+  height: 22px;
+  flex: none;
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  color: var(--brown-900);
+  background: var(--yellow);
+  border: 2px solid var(--brown-900);
+}
+
+.social a:hover .social-icon {
+  background: var(--brown-900);
+  color: var(--yellow);
+}
+
+.footer-menu .menu-icon {
+  display: none;
 }
 
 .footer-base {
@@ -80,11 +149,12 @@
   align-items: center;
   justify-content: space-between;
   gap: 12px;
-  padding-block: 18px 26px;
-  border-top: 1px solid var(--line);
+  padding-inline: clamp(18px, 4vw, 58px);
+  padding-block: 16px 24px;
   font-family: var(--font-mono);
   font-size: 0.74rem;
-  color: var(--fg-faint);
+  color: #d9b892;
+  border-top: var(--hair) solid rgba(255, 255, 255, 0.16);
 }
 
 .footer-meta {
@@ -95,11 +165,11 @@
 }
 
 .footer-meta a {
-  color: var(--fg-faint);
+  color: #ffdcae;
 }
 
 .footer-meta a:hover {
-  color: var(--cyan);
+  color: var(--yellow);
 }
 
 @media (max-width: 760px) {

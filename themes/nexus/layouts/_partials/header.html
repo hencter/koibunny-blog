@@ -1,23 +1,32 @@
 {{- /*
-  站点顶栏：品牌 + 导航 + 移动端开关。
-  移动端开关由 assets/js/main.js 驱动；没有 JS 时导航保持可见（见 CSS 的默认展开规则）。
+  站点顶栏：像素徽章 + 品牌 + 导航 + 移动端开关。
+
+  徽章用 🐰，和参考页一致；它只是装饰，所以带 aria-hidden，
+  品牌名本身已经说明了站点身份。
+  移动端开关由 assets/js/main.js 驱动：没有 JS 时导航保持可见（见 CSS 的默认展开规则）。
 */ -}}
-<div class="wrap header-inner">
+<div class="header-inner">
   <a class="brand" href="{{ site.Home.RelPermalink }}">
-    <span class="brand-mark" aria-hidden="true">N</span>
+    <span class="brand-badge" aria-hidden="true">🐰</span>
     <span class="brand-text">
       <span class="brand-name">{{ site.Title }}</span>
       {{- with site.Params.tagline }}<span class="brand-tagline">{{ . }}</span>{{ end }}
     </span>
   </a>
 
+  <nav id="site-nav" class="site-nav" aria-label="主导航" data-nav>
+    {{- partial "menu.html" (dict "menuID" "main" "page" .) }}
+  </nav>
+
+  <label class="site-search" aria-label="搜索当前页面内容">
+    <span class="search-icon" aria-hidden="true">⌕</span>
+    <input type="search" placeholder="搜索文章…" autocomplete="off" data-site-search data-search-url="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">
+    <span class="search-carrot" aria-hidden="true">🥕</span>
+  </label>
+
   <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
     <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
     <span class="sr-only">切换导航</span>
   </button>
-
-  <nav id="site-nav" class="site-nav" aria-label="主导航" data-nav>
-    {{- partial "menu.html" (dict "menuID" "main" "page" .) }}
-    <a class="nav-rss" href="{{ "index.xml" | relURL }}">RSS</a>
-  </nav>
 </div>
+<p class="search-status sr-only" aria-live="polite" data-search-status></p>

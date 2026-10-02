@@ -1,6 +1,6 @@
 {{ define "main" }}
   {{- $terms := .Pages.ByTitle -}}
-  <div class="wrap">
+  <div class="wrap page-pad">
     <header class="page-head">
       <p class="eyebrow">分类法</p>
       <h1 class="page-head-title">{{ .Title }}</h1>
@@ -18,7 +18,7 @@
       {{- range . }}
       <li>
         <a class="term-chip hue-{{ mod (len .LinkTitle) 6 }}" href="{{ .RelPermalink }}">
-          <span class="term-name">{{ .LinkTitle }}</span>
+          <span class="term-name">#{{ .LinkTitle }}</span>
           <span class="term-count">{{ len .Pages }}</span>
         </a>
       </li>

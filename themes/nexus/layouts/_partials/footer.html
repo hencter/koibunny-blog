@@ -1,7 +1,13 @@
+{{- /*
+  页脚：暖棕底 + 奶油字，和顶栏呼应。
+
+  这里刻意保持信息密度和原来一致 —— 只换视觉，不删内容：
+  品牌区、导航列、社交列、版权行、构建元信息全部保留。
+*/ -}}
 {{- $author := site.Params.author | default site.Title -}}
-<div class="wrap footer-inner">
+<div class="footer-inner">
   <div class="footer-brand">
-    <p class="footer-title">{{ site.Title }}</p>
+    <p class="footer-title"><span class="footer-badge" aria-hidden="true">🐰</span>{{ site.Title }}</p>
     {{- with site.Params.tagline }}<p class="footer-tagline">{{ . }}</p>{{ end }}
     {{- with site.Params.location }}<p class="footer-location">{{ . }}</p>{{ end }}
   </div>
@@ -16,9 +22,12 @@
       <p class="footer-heading">联系</p>
       <ul class="social">
         {{- range . }}
+        {{- /* 站内地址（例如配置里的 /index.xml）由 social-url.html 换成带 baseURL 前缀的地址 */}}
         <li>
-          {{- /* 只有真正的外部地址才新开标签页；站内路径与 mailto 都不加 target */}}
-          <a href="{{ .url }}"{{ if hasPrefix .url "http" }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
+          <a href="{{ partial "social-url.html" (dict "site" site "url" .url) }}"{{ if hasPrefix .url "http" }} target="_blank" rel="me noopener"{{ end }}>
+            {{- with .icon }}<span class="social-icon" aria-hidden="true">{{ . }}</span>{{ end -}}
+            {{ .name }}<span class="arrow" aria-hidden="true">↗</span>
+          </a>
         </li>
         {{- end }}
       </ul>
@@ -27,14 +36,14 @@
   </div>
 </div>
 
-<div class="wrap footer-base">
+<div class="footer-base">
   <p class="footer-copy">
     © {{ with site.Params.startYear }}{{ if lt . now.Year }}{{ . }}–{{ end }}{{ end }}{{ now.Year }} {{ $author }}
   </p>
   <p class="footer-meta">
     <span>Hugo {{ hugo.Version }}</span>
-    <a href="{{ "sitemap.xml" | relURL }}">站点地图</a>
-    <a href="{{ "index.xml" | relURL }}">RSS</a>
+    <a href="{{ partial "site-url.html" (dict "site" site "file" "sitemap.xml") }}">站点地图</a>
+    <a href="{{ partial "site-url.html" (dict "site" site "output" "rss") }}">RSS</a>
     {{- with .GitInfo }}
     <span title="{{ .Subject }}（{{ .AuthorName }}）">提交 {{ .AbbreviatedHash }}</span>
     {{- end }}

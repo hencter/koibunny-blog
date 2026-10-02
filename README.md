@@ -1,11 +1,23 @@
-# NEXUS — 科技风个人博客
+# NEXUS — 像素风个人博客
 
-一个 Hugo 静态站点：深色霓虹配色、纯 CSS 绘制的网格与光晕、零第三方 JS 依赖。
-内容为中文，覆盖文章、项目与关于三类页面。
+一个 Hugo 静态站点：**像素画 / 暖色风格**——奶油纸底、皮革棕描边、硬投影（模糊半径为 0）
+的立体块，配蓝天、山、池塘、锦鲤这些纯 CSS 画的像素场景。
+零第三方 JS、零位图素材、零外部字体（连 Google Fonts 都不引）。
 
 - **Hugo**：v0.167.0（本仓库在 v0.167.0 上验证通过，见文末「验证记录」）
 - **主题**：`themes/nexus`，自研，随仓库一起版本管理
 - **依赖**：无。没有 npm、没有 Hugo Modules、没有外部字体
+- **配色**：浅色（`color-scheme: light`），没有明暗切换开关
+
+风格取自 `参考/koibunny-blog/`（一份静态参考页）：
+顶栏的棕色皮革渐变、导航的黄色像素牌、hero 的像素画风景、
+卡片的描边厚阴影、六档色相的标签 chip 都对齐了那份参考。
+参考页 hero 用的是一张 3.5MB 的像素画位图，这里**没有**照搬——
+`themes/nexus/assets/css/components/home.css` 里的 `.hero-scene` 用 layered background
+画了同一类场景（天空条纹 / 阶梯云 / 像素山 / 池塘 / 锦鲤 / 树 / 灯笼 / 太阳）。
+
+> 参考目录 `参考/` 本身是未纳入版本管理的素材，改完风格后可以自行删除或保留；
+> 站点构建完全不依赖它（`hugo` 会忽略它，因为它不在 `content/` / `static/` / `assets/` 下）。
 
 ---
 
@@ -67,27 +79,35 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 │   ├── default.md
 │   └── projects.md
 ├── content/
-│   ├── _index.md              # 首页（正文会渲染在 hero 下方）
+│   ├── _index.md              # 首页 front matter（title / description 供 hero 使用）
 │   ├── about.md               # /about/
 │   ├── posts/                 # /posts/ —— 1 篇文章 + _index.md
 │   └── projects/              # /projects/ —— 5 个项目 + _index.md
 ├── layouts/
 │   └── baseof.html            # ★ 契约层：骨架与块名，见下一节
 ├── static/
-│   ├── favicon.svg
-│   └── images/og-default.png  # 社交分享图（og:image）
+│   ├── favicon.svg            # 手写的矢量图标（旧版遗留，favicon.ico 优先）
+│   ├── favicon.ico            # ← make-og-pixel.py 生成（16/32/48）
+│   ├── favicon-256.png        # ← make-og-pixel.py 生成
+│   └── images/og-default.png  # ← make-og-pixel.py 生成的像素风社交分享图
 ├── themes/nexus/
 │   ├── hugo.toml              # 只声明 hugoVersion 约束
 │   ├── layouts/               # 页面模板与 partials
 │   │   ├── home.html  page.html  section.html  taxonomy.html  term.html
 │   │   ├── 404.html  robots.txt
 │   │   ├── _partials/         # head / header / footer / menu / 卡片 / 目录 …
+│   │   │                      # 其中 site-url.html、social-url.html 专管 baseURL 前缀
 │   │   └── _shortcodes/       # callout
 │   └── assets/
 │       ├── css/               # base + components/*，外加生成的 syntax.css
+│       │                      # 像素场景与卡片封面在 components/home.css
 │       └── js/main.js         # 导航、复制按钮、进度条、目录高亮
 └── .github/workflows/hugo.yml # GitHub Pages 部署
 ```
+
+> 首页的 `.hero` 已经把标题、副标题、导语都渲染出来了，所以 `home.html` **不再**输出
+> `content/_index.md` 的正文——否则同一段话会在 hero 和下方各出现一次。
+> `_index.md` 里保留 `title` / `description`，它们是 hero 的数据来源。
 
 ### 项目与文章清单
 
@@ -192,8 +212,12 @@ hugo new content projects/my-project.md    # 用 archetypes/projects.md
 > 曾经还有一个 `terminal` 短代码（把 `$` 开头的行渲染成提示符 + 命令），
 > 它只在骨架阶段的示例文章里用过。那批文章删除后没有任何页面引用它，
 > `--printUnusedTemplates` 会把「模板未被使用」报成警告、并被 `--panicOnWarning` 升级为失败，
-> 所以模板文件已删除。首页那个终端卡片用的是 `home.html` 里的内联标记 + `home.css`，
-> 与这个短代码无关，不受影响。需要时按 git 历史 `9c494da` 之前的版本恢复即可。
+> 所以模板文件已删除。需要时按 git 历史 `9c494da` 之前的版本恢复即可。
+>
+> 换成像素风时，首页那块「终端卡片」也一起下线了（hero 的视觉卖点变成了 CSS 像素风景），
+> 所以 `assets/js/main.js` 里给它写的逐行打字动画、以及 `hugo.toml` 的 `[params.hero]` 段落
+> 都一并删除，避免留下永不触发的死代码。现在只有 **404 页**还在用终端样式
+> （`.terminal-body` / `.tl-*`），那部分是静态文本，不需要 JS。
 >
 > 写文档时注意：如果要在**正文里展示**短代码写法本身，必须转义成
 > `{{</* callout */>}}` 这样的形式。Hugo 在 Markdown 之前就扫描短代码，
@@ -213,12 +237,13 @@ hugo new content projects/my-project.md    # 用 archetypes/projects.md
 | `[params] description` | 首页与默认 meta description |
 | `[params] author` / `authorRole` / `location` / `email` | 页脚、JSON-LD、关于页署名 |
 | `[params] startYear` | 页脚版权起始年份 |
-| `[params.social]` | 有序数组，顺序即显示顺序；`icon` 字段当前未使用（用文字链接）。**只放真实存在的账号**：模板会原样输出链接，占位地址等于给读者一个 404 |
-| `[params.hero.lines`] | 首页终端卡片逐行打印的文字，偶数下标渲染成命令、奇数下标渲染成输出 |
+| `[params.social]` | 有序数组，顺序即显示顺序。`icon` 字段会被压成一个像素方块显示首字母；**以 `/` 开头的站内地址**（如 RSS 的 `/index.xml`）由 `_partials/social-url.html` 换成带 baseURL 前缀的地址，所以可以放心写。**只放真实存在的账号**：模板会原样输出链接，占位地址等于给读者一个 404 |
+| `[params] heroNote` | 首页 hero 那条「不追热点…」说明条的文字；不写就用模板里的缺省句 |
 | `[params] ogImage` | 社交分享图路径，相对 `static/`，用 `absURL` 转绝对地址 |
 
-配色令牌在 `themes/nexus/assets/css/base.css` 的 `:root` 里，改 `--cyan` / `--magenta` / `--bg`
-就能整体换色，其余组件都引用这些变量。
+配色令牌在 `themes/nexus/assets/css/base.css` 的 `:root` 里，改 `--cream` / `--brown-700` /
+`--yellow` 就能整体换色，其余组件都引用这些变量；六档标签色是 `--hue-0`…`--hue-5`。
+`--sh-1` / `--sh-2` / `--sh-card` 是那几组固定像素硬投影，改它们会同时影响所有"浮起来"的方块。
 
 ---
 
@@ -279,19 +304,52 @@ hugo v0.167.0-3fff6fb5c267dacb26280c78dbe8c344054249c8+extended windows/amd64
 （`resources.Get` / `resources.Concat` / `minify` / `fingerprint`），没有用 `css.Build` 或 SCSS，
 所以标准版 Hugo 也能构建。`min` 的依据是 0.158.0 起 `languageCode` 改名 `locale` 且 `.Locale` 可用。
 
-本仓库通过的确切检查（2026-10-03 移除 Nova 后重跑）：
+本仓库通过的确切检查（2026-10-03 换像素风之后重跑）：
 
 | 检查 | 命令 | 结果 |
 | --- | --- | --- |
-| 严格构建 | `hugo --ignoreCache --cleanDestinationDir --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings` | 退出码 0，0 警告、0 路径冲突、0 未使用模板 |
+| 严格构建 | `hugo --ignoreCache --cleanDestinationDir --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings` | 退出码 0，0 警告、0 路径冲突、0 未使用模板；28 页、4 个静态文件 |
 | 内容清单 | `hugo list all` | 11 行（1 行表头 + 10 个内容页），与 `content/` 里 10 个 `.md` 一一对应 |
-| 产物齐全 | 逐个核对 `public/` | 7/7 非索引内容页都有对应 `index.html` |
+| 产物齐全 | 逐个核对 `public/` | 18 个 HTML 齐全：7 个内容页 + 列表/标签/分类/分页/404 |
 | 生产环境 | `hugo`（默认 `production`） | `robots.txt` 为 `Allow: /`，页面 `index, follow` |
 | 开发环境 | `hugo -e development` | `robots.txt` 为 `Disallow: /`，页面 `noindex, nofollow` |
-| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 18 个 HTML、20 个站内 URL，0 断链 |
+| 内部链接 | 遍历 `public/` 收集 `href`/`src`，按目录解析（目录补 `index.html`、中文路径先 `decodeURIComponent`）后逐个验证目标存在 | 375 个站内链接引用，0 断链 |
+| baseURL 前缀 | 遍历 `public/` 检查每个站内绝对地址都以 `/tech-blog/` 开头 | 0 例外（这条曾经挂过，见下面「两个真实断链」） |
+| class 覆盖 | 把 HTML 里用到的 class 与 `bundle.css` 的选择器做交叉核对 | 0 缺口（仅剩 Chroma 代码高亮的 `n`/`nv`/`p` 等 1-2 字母 token 类，那是有意为之） |
+| 编码完整性 | 按字节读回所有改动文件，用 `UTF-8` 解码后搜 GBK 误解码特征 | 0 命中（见下面「PowerShell 批量改写会把中文写坏」） |
+| 视觉验证 | 无头 Chrome + CDP（`Emulation.setDeviceMetricsOverride` 设视口），5 个页面 × 桌面 1440 / 移动 390 | 全部 `horizontalOverflow: false`，无元素越界；截图逐张核对 |
 | 结构化数据 | 用真实 JSON 解析器解析 JSON-LD | 解析通过：首页 `@type=WebSite`，文章与项目页 `@type=BlogPosting` |
 | 短代码转义 | 在 `content/` 里搜可疑分隔符写法与占位字面量 | 无可疑写法，无 `HAHAHUGOSHORTCODE` |
 | 身份占位符 | 在 `public/` 全文搜 `Your Name` / `yourname` / `you@example` | 0 命中 |
+
+### 换风格时实际抓到的两个真实断链（值得记下来）
+
+这两个都是**主题之外**的既有问题，本地 `hugo server` 完全看不出来，只在项目站点上 404：
+
+1. **Hugo 的 `relURL` 不会拼 baseURL 的路径部分。** 模板里写 `{{ "/posts/" | relURL }}`
+   得到的是 `/posts/`，不是 `/tech-blog/posts/`。本地 server 的 baseURL 没有路径，
+   所以看起来一切正常；线上 `https://koibunny.github.io/tech-blog/` 就会跳到域名根。
+   修法是统一走 `_partials/site-url.html`：`pageRef` 取内容页的 `.RelPermalink`，
+   `output` 取 `OutputFormats`（RSS 用），`file` 才用 `relURL`。
+   另外 `hugo.toml` 里 `[[params.social]]` 的 RSS 地址是 `/index.xml`，
+   它由 `_partials/social-url.html` 解析，不能直接输出 `.url`。
+2. **正文里的根相对 Markdown 链接**（`[《E 盘开源体检》](/posts/open-source-audit/)`）同样是裸地址，
+   要换成 `[《E 盘开源体检》]({{</* relref "/posts/open-source-audit" */>}})`。
+
+判据：**只要一个站内地址不是 Hugo 算出来的，就要怀疑它在项目站点上会不会失效。**
+上面的「baseURL 前缀」那一项就是专门盯这个的。
+
+### 两个过程性教训
+
+- **PowerShell 批量改写文本文件会写坏中文。** 用 `Get-Content`（默认按 ANSI 读）
+  读含中文的模板再 `WriteAllText` 写回，中文会变成 `鈻?闃呰` 这种 GBK 误解码产物。
+  要么用会按 UTF-8 读写的编辑器，要么显式 `[System.IO.File]::ReadAllText($p, [Text.Encoding]::UTF8)`。
+  改完必须按字节读回来验证，光看构建成功是不够的——Hugo 会把乱码当普通字符照常渲染。
+- **视觉验证不能省。** 这次抓到三个只有渲染出来才看得见的问题：
+  404 页一条遗留的 `.error-terminal{background:var(--navy)}` 配上硬编码的浅色文字，
+  让 `curl` 那行变成白底白字；hero 风景被遮罩压到几乎看不见；
+  卡片封面顶部有一条 2px 白缝（图层高度取了非整数）。
+  这些在构建日志里一个警告都不会有。
 
 删除内容之后，有两件事必须一起做，这次两个都实际踩到了：
 
@@ -306,23 +364,49 @@ hugo v0.167.0-3fff6fb5c267dacb26280c78dbe8c344054249c8+extended windows/amd64
 - 站内链接在产物里带 `baseURL` 路径前缀（`/tech-blog/...`），比较前必须去掉，否则全部误报；
 - 中文标签/分类目录在 `href` 里是百分号编码的，比较前必须 `[uri]::UnescapeDataString` 解码。
 
-`assets/css/syntax.css` 是生成的，不要手改。换了 `[markup.highlight] style` 之后重新生成：
+`assets/css/syntax.css` 是生成的，不要手改。**风格必须是浅色系**——全站底色是奶油纸，
+深色主题的代码块会像补丁。换 `[markup.highlight] style` 之后按下面的方式重新生成：
+
+> Windows PowerShell 5.1 的 `>` 会把输出写成 **UTF-16LE**（带 `FF FE` 序言），不是 UTF-8。
+> 这个文件会被拼接到 `bundle.css` 中间，非 UTF-8 字节会造成解析错误。
+> 实测（Hugo 0.167.0）`gen chromastyles` 的 `-d` 参数**只改输出里的注释**，
+> 无论给它目录还是 `.css` 文件名都仍然打到 stdout、不落盘，所以别指望用它落文件。
+> 可靠写法是让 PowerShell 自己显式写 UTF-8（`.NET` 调用，无 BOM）：
+>
+> ```powershell
+> $css = hugo gen chromastyles --style tokyonight-day
+> [System.IO.File]::WriteAllText(
+>   "themes\nexus\assets\css\syntax.css",
+>   ($css -join "`n") + "`n",
+>   (New-Object System.Text.UTF8Encoding($false))
+> )
+> ```
+>
+> 生成后核对前三个字节不是 `FF FE`（UTF-16LE）也不是 `EF BB BF`（UTF-8 BOM）。
+
+社交分享图 `static/images/og-default.png` 与两个 favicon 也是生成的（像素风），
+生成脚本在本工作区，用工作区自带的 Python 跑：
 
 ```powershell
-hugo gen chromastyles --style tokyonight-night > themes/nexus/assets/css/syntax.css
+& "E:\DeepSeekHarnessWork\.tooling\make-og-pixel.py"
 ```
 
-> Windows PowerShell 5.1 的 `>` / `-Encoding UTF8` 会写 BOM。这个文件会被拼接到
-> `bundle.css` 中间，开头的 BOM 会造成解析错误。生成后用编辑器另存为「UTF-8 无 BOM」，
-> 或者核对文件前三个字节不是 `EF BB BF`。
+脚本里的 `TITLE` / `TAGLINE` 是硬编码的，改站名或副标题时要同步。
 
 ---
 
 ## 已知取舍
 
-- **只做深色**。没有明暗切换开关，`color-scheme` 固定为 `dark`。
+- **只做浅色**。奶油纸底是整套视觉的前提，没有明暗切换开关，`color-scheme` 固定为 `light`。
+  代码块的高亮风格也必须跟着选浅色系（见上面 `syntax.css` 那一段）。
 - **没有站内搜索**。静态站点要做搜索需要额外的索引文件或第三方服务，当前刻意留空。
-- **没有图片资源**。视觉全部由 CSS 渐变与几何图形构成，所以仓库里没有二进制素材。
+- **正文里没有图片资源**。视觉全部由 CSS 渐变与几何图形构成；
+  唯一的位图是两个**站外用途**的产物：`og-default.png`（社交分享卡片）
+  和 `favicon.ico` / `favicon-256.png`（浏览器标签图标），都由 `make-og-pixel.py` 生成。
+- **hero 的像素风景是 CSS 画的，不是位图**。好处是零素材、任意分辨率都锐利；
+  代价是形状只能做到"阶梯色块"级别，画不出参考页那种手绘像素画的细节
+  （比如参考页那只坐在电脑前的兔子）。`.hero-scene` 里的每个元素都是一个
+  定好 `background-size` 的 div，想改形状就改那些尺寸和位置。
 - **文章数量少**。`posts/` 目前只剩 1 篇（[E 盘开源体检](content/posts/open-source-audit.md)）。
   骨架阶段那 6 篇示例长文因实测数字与故障时间线是构造的而整体删除；
   Nova 那篇因题材不属于本站作者而删除。文章需要从头积累——

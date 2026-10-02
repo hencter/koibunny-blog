@@ -10,7 +10,7 @@
 # 改 GitHub 用户名或仓库名后必须同步这里：Pages 不会把旧地址重定向过来（旧地址直接 404），
 # 而 canonical / og:url / og:image / sitemap 全部由它生成。
 baseURL = 'https://koibunny.github.io/tech-blog/'
-title = 'NEXUS'
+title = 'KoiBunny 的 AI 博客'
 theme = 'nexus'
 
 locale = 'zh-CN'
@@ -38,9 +38,10 @@ enableGitInfo = true
 
 # ── 参数 ─────────────────────────────────────────────────────────────────────
 [params]
-  tagline = '代理工作流 · 知识库 · 开源体检'
-  description = 'NEXUS 是一个关于 AI 代理工作流、知识库维护与项目开源实践的个人技术博客：记录能跑起来的做法、判断的依据，以及那些文档里没写的坑。'
-  author = 'koibunny'
+  tagline = 'KoiBunny · AI LEARNING LAB'
+  description = '这里记录我自己会回头查的笔记：能跑起来的实验、读过源码后的结论，以及踩过的坑。'
+  heroTitle = '把 AI 说明白，也把实验跑起来'
+  author = 'KoiBunny'
   authorRole = 'AI 代理工作流 / 独立开发者'
   location = 'China'
   startYear = 2024
@@ -53,6 +54,8 @@ enableGitInfo = true
   ogImage = 'images/og-default.png'
 
   # 社交链接（有序列表，顺序即显示顺序）
+  # 站内地址（以 / 开头）在模板里会走 site-url.html 换成带 baseURL 前缀的绝对地址；
+  # 这里不要写成别的形式，否则项目站点上会跳到域名根目录。
   [[params.social]]
     name = 'GitHub'
     icon = 'github'
@@ -62,15 +65,8 @@ enableGitInfo = true
     icon = 'rss'
     url = '/index.xml'
 
-  # 首页终端卡片里逐行打印的文字
-  [params.hero]
-    prompt = '~'
-    lines = [
-      'whoami',
-      'koibunny — 带几个 AI 代理同时推进一堆项目',
-      'cat focus.txt',
-      '代理工作流 · 知识库维护 · 内容生产链路 · 开源体检',
-    ]
+  # 首页 hero 里那条说明条的文字。不写就用模板里的缺省句。
+  # heroNote = '不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。'
 
 # ── 菜单 ─────────────────────────────────────────────────────────────────────
 [[menus.main]]
@@ -78,11 +74,11 @@ enableGitInfo = true
   pageRef = '/'
   weight = 10
 [[menus.main]]
-  name = '文章'
+  name = '笔记文章'
   pageRef = '/posts'
   weight = 20
 [[menus.main]]
-  name = '项目'
+  name = '项目实践'
   pageRef = '/projects'
   weight = 30
 [[menus.main]]
@@ -90,7 +86,7 @@ enableGitInfo = true
   pageRef = '/tags'
   weight = 40
 [[menus.main]]
-  name = '关于'
+  name = '关于我'
   pageRef = '/about'
   weight = 50
 
@@ -107,8 +103,9 @@ enableGitInfo = true
       unsafe = true
   [markup.highlight]
     # 类名模式：配合 gen chromastyles 生成的 assets/css/syntax.css
+    # 风格必须是浅色系——全站底色是奶油纸，深色主题的代码块会像补丁
     noClasses = false
-    style = 'tokyonight-night'
+    style = 'tokyonight-day'
     lineNumbersInTable = true
     tabWidth = 2
   [markup.tableOfContents]

@@ -11,4 +11,4 @@ weight = 20
 
 `已发布` 表示代码已经在 GitHub 上，`整理中` 表示本地能跑、但还差清理与 LICENSE。
 还有一批项目不适合开源（含密钥、含第三方代码、或本身就是别人的仓库），
-判断过程写在[《E 盘开源体检》](/posts/open-source-audit/)里。
+判断过程写在[《E 盘开源体检》]({{< relref "/posts/open-source-audit" >}})里。

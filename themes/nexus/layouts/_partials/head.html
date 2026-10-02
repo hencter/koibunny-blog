@@ -36,8 +36,8 @@
 {{- else -}}
 <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1">
 {{- end }}
-<meta name="theme-color" content="#05060c">
-<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#70402b">
+<meta name="color-scheme" content="light">
 
 {{- /* Open Graph */}}
 <meta property="og:site_name" content="{{ site.Title }}">
@@ -70,6 +70,7 @@
 {{- end }}
 
 {{- /* 图标 */}}
+{{- /* 图标：static/ 下的文件，relURL 会带上 baseURL 的路径部分 */}}
 <link rel="icon" href="{{ "favicon.svg" | relURL }}" type="image/svg+xml">
 <link rel="icon" href="{{ "favicon.ico" | relURL }}" sizes="32x32">
 <link rel="apple-touch-icon" href="{{ "favicon.ico" | relURL }}">

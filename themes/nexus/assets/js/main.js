@@ -5,9 +5,6 @@
 (function () {
   "use strict";
 
-  var reduceMotion =
-    window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
   /* ── 1. 移动端导航 ─────────────────────────────────────────────────────
      先给 <html> 打上 data-nav-ready，CSS 才会把导航收起来；
      这样在没有 JS 的情况下导航保持展开，不会变成打不开的菜单。 */
@@ -40,7 +37,47 @@
     });
   }
 
-  /* ── 2. 阅读进度条 ─────────────────────────────────────────────────── */
+  /* ── 2. 文章 / 项目即时搜索 ─────────────────────────────────────────── */
+  var search = document.querySelector("[data-site-search]");
+  var searchStatus = document.querySelector("[data-search-status]");
+  var searchEmpty = document.querySelector("[data-search-empty]");
+  var searchCards = Array.prototype.slice.call(document.querySelectorAll("[data-search-card]"));
+
+  if (search) {
+    var runSearch = function () {
+      var query = search.value.trim().toLocaleLowerCase();
+      var visible = 0;
+
+      searchCards.forEach(function (card) {
+        var haystack = (card.getAttribute("data-search") || card.innerText).toLocaleLowerCase();
+        var match = !query || haystack.indexOf(query) !== -1;
+        card.hidden = !match;
+        if (match) visible += 1;
+      });
+
+      if (searchEmpty) searchEmpty.hidden = !query || visible !== 0;
+      if (searchStatus && searchCards.length) {
+        searchStatus.textContent = query ? "找到 " + visible + " 条匹配内容" : "已显示全部内容";
+      }
+    };
+
+    var initialQuery = new URLSearchParams(window.location.search).get("search");
+    if (initialQuery) {
+      search.value = initialQuery;
+      runSearch();
+    }
+
+    search.addEventListener("input", runSearch);
+    search.addEventListener("keydown", function (event) {
+      if (event.key === "Enter" && !searchCards.length && search.value.trim()) {
+        event.preventDefault();
+        var target = search.getAttribute("data-search-url");
+        window.location.href = target + "?search=" + encodeURIComponent(search.value.trim());
+      }
+    });
+  }
+
+  /* ── 3. 阅读进度条 ─────────────────────────────────────────────────── */
   var progress = document.querySelector("[data-scroll-progress]");
 
   if (progress) {
@@ -56,7 +93,7 @@
     window.addEventListener("resize", updateProgress);
   }
 
-  /* ── 3. 代码块复制按钮 ─────────────────────────────────────────────── */
+  /* ── 4. 代码块复制按钮 ─────────────────────────────────────────────── */
   Array.prototype.forEach.call(document.querySelectorAll(".prose .highlight"), function (block) {
     var code = block.querySelector("pre");
     if (!code) return;
@@ -109,77 +146,6 @@
 
     block.appendChild(button);
   });
-
-  /* ── 4. 首页终端逐行打字 ───────────────────────────────────────────────
-     文本已经由 Hugo 渲染在 HTML 里；这里只是把它重打成动画，
-     所以禁用 JS 或减弱动效时内容照样在。
-     因为动画会先清空文本，这里加了看门狗：任何原因导致动画没跑完，
-     就把原始文本放回去，绝不让内容真的消失。 */
-  var terminal = document.querySelector("[data-terminal] code");
-
-  if (terminal && !reduceMotion) {
-    var lines = Array.prototype.slice.call(terminal.querySelectorAll(".tl"));
-    var texts = lines.map(function (line) {
-      return line.textContent;
-    });
-    var finished = false;
-
-    var restore = function () {
-      if (finished) return;
-      finished = true;
-      window.clearTimeout(watchdog);
-      lines.forEach(function (line, index) {
-        line.textContent = texts[index];
-      });
-    };
-
-    var watchdog = window.setTimeout(restore, 8000);
-
-    lines.forEach(function (line) {
-      line.textContent = "";
-    });
-
-    var lineIndex = 0;
-
-    var typeLine = function () {
-      try {
-        if (lineIndex >= lines.length) {
-          finished = true;
-          window.clearTimeout(watchdog);
-          return;
-        }
-
-        var line = lines[lineIndex];
-        var full = texts[lineIndex];
-        // 命令逐个字符打出来，输出行整行出现：更像真实终端
-        var isCommand = line.classList.contains("tl-cmd");
-        var step = isCommand ? 1 : full.length;
-        var pos = 0;
-
-        var tick = function () {
-          try {
-            pos = Math.min(full.length, pos + step);
-            line.textContent = full.slice(0, pos);
-
-            if (pos < full.length) {
-              window.setTimeout(tick, isCommand ? 34 : 0);
-            } else {
-              lineIndex += 1;
-              window.setTimeout(typeLine, isCommand ? 260 : 90);
-            }
-          } catch (err) {
-            restore();
-          }
-        };
-
-        tick();
-      } catch (err) {
-        restore();
-      }
-    };
-
-    window.setTimeout(typeLine, 320);
-  }
 
   /* ── 5. 目录滚动高亮 ───────────────────────────────────────────────── */
   var toc = document.querySelector(".toc");

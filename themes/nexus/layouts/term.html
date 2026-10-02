@@ -1,8 +1,8 @@
 {{ define "main" }}
-  <div class="wrap">
+  <div class="wrap page-pad">
     <header class="page-head">
       <p class="eyebrow">
-        <a href="{{ "/tags/" | relURL }}">全部标签</a>
+        <a href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}">全部标签</a>
       </p>
       <h1 class="page-head-title"><span class="term-hash" aria-hidden="true">#</span>{{ .Title }}</h1>
       <p class="page-head-meta">{{ len .Pages }} 篇</p>

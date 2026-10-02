@@ -1,102 +1,64 @@
 {{ define "main" }}
   {{- $posts := (where site.RegularPages "Section" "posts").ByDate.Reverse -}}
   {{- $projects := (where site.RegularPages "Section" "projects").ByWeight -}}
-  {{- $tags := site.Taxonomies.tags.ByCount -}}
 
-  {{- /* ── Hero ───────────────────────────────────────────────────────── */}}
-  <section class="hero wrap">
+  <section class="hero" id="home">
+    <div class="hero-art" aria-hidden="true"></div>
     <div class="hero-copy">
-      {{- with site.Params.tagline }}
-      <p class="eyebrow">{{ . }}</p>
-      {{- end }}
-      <h1 class="hero-title">{{ site.Title }}</h1>
-      {{- with site.Params.description }}
-      <p class="hero-lead">{{ . }}</p>
-      {{- end }}
+      <h1 class="hero-title">
+        <span class="hero-brand-title">{{ site.Title }}</span>
+        <span class="hero-slogan"><span>把 <em>AI</em> 说明白，</span><span>也把 <strong>实验</strong> 跑起来</span></span>
+      </h1>
+      <p class="hero-lead">
+        <span>这里记录我自己会回头查的笔记：能跑起来的实验、</span>
+        <span>读过源码后的结论、以及踩过的坑。</span>
+      </p>
+      <p class="note-banner"><span aria-hidden="true">💡</span>{{ site.Params.heroNote | default "不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。" }}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="{{ "/posts/" | relURL }}">阅读文章</a>
-        <a class="btn" href="{{ "/about/" | relURL }}">关于我</a>
+        <a class="btn btn-primary" href="#latest-notes">▣ 看最新笔记 <span aria-hidden="true">→</span></a>
+        <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">🐰 关于 KoiBunny</a>
       </div>
-      {{- with site.Params.social }}
-      <ul class="hero-social">
-        {{- range . }}
-        <li>
-          <a href="{{ .url }}"{{ if hasPrefix .url "http" }} target="_blank" rel="me noopener"{{ end }}>{{ .name }}<span class="arrow" aria-hidden="true">↗</span></a>
-        </li>
-        {{- end }}
-      </ul>
-      {{- end }}
     </div>
+  </section>
 
-    {{- with site.Params.hero }}
-    {{- $prompt := .prompt | default "~" -}}
-    {{- $owner := site.Params.author | default "guest" -}}
-    <div class="terminal hero-terminal" role="img" aria-label="终端风格的个人简介">
-      <div class="terminal-bar">
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-dot" aria-hidden="true"></span>
-        <span class="terminal-title">{{ $owner }}@{{ lower site.Title }}</span>
+  <section class="section-block latest-section" id="latest-notes">
+    <div class="section-head">
+      <div class="section-head-main">
+        <p class="section-kicker">LATEST NOTES</p>
+        <h2 class="section-title">🌱 最新文章</h2>
       </div>
-      <pre class="terminal-body" data-terminal><code>{{- range $i, $line := .lines }}{{ if mod $i 2 }}<span class="tl tl-out">{{ $line }}</span>{{ else }}<span class="tl tl-cmd"><span class="tl-prompt">{{ $prompt }} $</span> {{ $line }}</span>{{ end }}{{ end }}</code></pre>
+      <a class="section-more" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">查看更多 <span aria-hidden="true">→</span></a>
     </div>
+    {{- if $posts }}
+    <div class="post-grid" data-search-grid>
+      {{- range first 4 $posts }}{{ partial "post-card.html" (dict "page" .) }}{{ end }}
+    </div>
+    {{- else }}
+    <div class="empty-state">🐰 文章还在路上，先去看看项目实践吧。</div>
     {{- end }}
+    <div class="empty-state" data-search-empty hidden>🐰 没找到匹配内容，换个关键词试试。</div>
   </section>
 
-  {{- /* ── 首页正文（content/_index.md） ───────────────────────────────── */}}
-  {{- with .Content }}
-  <section class="wrap section-block">
-    <div class="prose home-intro">{{ . }}</div>
-  </section>
-  {{- end }}
+  <nav class="category-strip" aria-label="内容分类">
+    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">⚗</span><span class="category-text"><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">📖</span><span class="category-text"><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">🔧</span><span class="category-text"><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}"><span class="category-icon" aria-hidden="true">🗺</span><span class="category-text"><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span><i aria-hidden="true">›</i></a>
+  </nav>
 
-  {{- /* ── 最新文章 ───────────────────────────────────────────────────── */}}
-  {{- with $posts }}
-  <section class="wrap section-block">
-    <div class="section-head">
-      <h2 class="section-title"><span class="section-index" aria-hidden="true">01</span>最新文章</h2>
-      <a class="section-more" href="{{ "/posts/" | relURL }}">全部文章<span aria-hidden="true"> →</span></a>
-    </div>
-    <div class="post-grid">
-      {{- range first 6 . }}
-        {{- partial "post-card.html" (dict "page" .) }}
-      {{- end }}
-    </div>
-  </section>
-  {{- end }}
-
-  {{- /* ── 项目 ───────────────────────────────────────────────────────── */}}
   {{- with $projects }}
-  <section class="wrap section-block">
+  <section class="section-block project-section">
     <div class="section-head">
-      <h2 class="section-title"><span class="section-index" aria-hidden="true">02</span>项目</h2>
-      <a class="section-more" href="{{ "/projects/" | relURL }}">全部项目<span aria-hidden="true"> →</span></a>
+      <div class="section-head-main"><p class="section-kicker">SELECTED WORK</p><h2 class="section-title">▣ 项目实践</h2></div>
+      <a class="section-more" href="{{ partial "site-url.html" (dict "site" site "pageRef" "projects") }}">全部项目 <span aria-hidden="true">→</span></a>
     </div>
-    <div class="project-grid">
-      {{- range first 3 . }}
-        {{- partial "project-card.html" (dict "page" .) }}
-      {{- end }}
-    </div>
+    <div class="project-grid" data-search-grid>{{- range first 3 . }}{{ partial "project-card.html" (dict "page" .) }}{{ end }}</div>
   </section>
   {{- end }}
 
-  {{- /* ── 标签 ───────────────────────────────────────────────────────── */}}
-  {{- with $tags }}
-  <section class="wrap section-block">
-    <div class="section-head">
-      <h2 class="section-title"><span class="section-index" aria-hidden="true">03</span>标签</h2>
-      <a class="section-more" href="{{ "/tags/" | relURL }}">全部标签<span aria-hidden="true"> →</span></a>
-    </div>
-    <ul class="term-cloud">
-      {{- range first 14 . }}
-      <li>
-        <a class="term-chip hue-{{ mod (len .Page.LinkTitle) 6 }}" href="{{ .Page.RelPermalink }}">
-          <span class="term-name">{{ .Page.LinkTitle }}</span>
-          <span class="term-count">{{ .Count }}</span>
-        </a>
-      </li>
-      {{- end }}
-    </ul>
+  <section class="about-panel">
+    <div class="about-rabbit" aria-hidden="true">🐰</div>
+    <div><p class="section-kicker">ABOUT KoiBunny</p><h2>这是一个给自己长期复用的 AI 笔记库</h2><p>我更关心“为什么能工作”和“怎样复现”，而不是追逐每天的新名词。每篇内容尽量留下代码、流程、上下文和失败记录。</p></div>
+    <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">认识我 <span aria-hidden="true">→</span></a>
   </section>
-  {{- end }}
 {{ end }}

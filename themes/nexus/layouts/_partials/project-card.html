@@ -3,6 +3,9 @@
   status / stack / repo / demo。
 
   @context {page} page 项目页；也可以直接传一个 page。
+
+  和文章卡片一样用纯 CSS 像素封面，色相档位取标题长度取模。
+  项目卡多一条 status 徽标和一行外链，位置在卡片底部。
 */ -}}
 {{- $p := .page | default . -}}
 {{- $summary := "" -}}
@@ -11,24 +14,30 @@
 {{- else -}}
   {{- $summary = $p.Summary | plainify | chomp | truncate 130 -}}
 {{- end -}}
-<article class="project-card">
-  <div class="project-card-head">
-    <h3 class="project-card-title">
-      <a class="project-card-link" href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a>
-    </h3>
-    {{- with $p.Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+<article class="project-card" data-search-card data-search="{{ $p.LinkTitle }} {{ $summary }} {{ delimit $p.Params.stack " " }}">
+  <div class="card-visual hue-{{ mod (len $p.LinkTitle) 6 }}">
+    <span class="visual-chip">PROJECT</span>
+    <span class="mini-rabbit" aria-hidden="true">🐰</span>
   </div>
-  {{- with $summary }}
-  <p class="project-card-desc">{{ . }}</p>
-  {{- end }}
-  {{- with $p.Params.stack }}
-  <ul class="stack">
-    {{- range . }}<li>{{ . }}</li>{{ end }}
-  </ul>
-  {{- end }}
-  <div class="project-card-links">
-    {{- with $p.Params.repo }}<a href="{{ . }}" target="_blank" rel="noopener">源码<span aria-hidden="true"> ↗</span></a>{{ end }}
-    {{- with $p.Params.demo }}<a href="{{ . }}" target="_blank" rel="noopener">演示<span aria-hidden="true"> ↗</span></a>{{ end }}
-    <a href="{{ $p.RelPermalink }}">详情<span aria-hidden="true"> →</span></a>
+  <div class="project-card-body">
+    <div class="project-card-head">
+      <h3 class="project-card-title">
+        <a class="project-card-link" href="{{ $p.RelPermalink }}">{{ $p.LinkTitle }}</a>
+      </h3>
+      {{- with $p.Params.status }}<span class="status status-{{ . }}">{{ . }}</span>{{ end }}
+    </div>
+    {{- with $summary }}
+    <p class="project-card-desc">{{ . }}</p>
+    {{- end }}
+    {{- with $p.Params.stack }}
+    <ul class="stack">
+      {{- range . }}<li>{{ . }}</li>{{ end }}
+    </ul>
+    {{- end }}
+    <div class="project-card-links">
+      {{- with $p.Params.repo }}<a href="{{ . }}" target="_blank" rel="noopener">源码<span aria-hidden="true"> ↗</span></a>{{ end }}
+      {{- with $p.Params.demo }}<a href="{{ . }}" target="_blank" rel="noopener">演示<span aria-hidden="true"> ↗</span></a>{{ end }}
+      <a href="{{ $p.RelPermalink }}">详情<span aria-hidden="true"> →</span></a>
+    </div>
   </div>
 </article>
