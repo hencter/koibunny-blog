@@ -14,6 +14,9 @@
 本工作区已经放了一份便携版 Hugo，不需要另外安装：
 
 ```powershell
+# Hugo 命令必须在站点根目录执行
+cd 'E:\DeepSeekHarnessWork\博客网站'
+
 # 本地预览（带热重载）
 E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe server -D
 
@@ -34,7 +37,7 @@ E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe --gc --minify
 ## 目录结构
 
 ```
-tech-blog/
+博客网站/
 ├── hugo.toml                  # 站点配置：身份、菜单、日期来源、Markdown、高亮
 ├── archetypes/                # hugo new content 的 front matter 模板
 │   ├── default.md
