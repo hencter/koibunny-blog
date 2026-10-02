@@ -5,7 +5,9 @@
 #  所有顶层标量必须写在第一个 `[table]` 之前，否则会静默变成表内字段。
 # ─────────────────────────────────────────────────────────────────────────────
 
-baseURL = 'https://example.org/'
+# GitHub Pages 项目站点地址：https://<用户>.github.io/<仓库>/
+# 本地 `hugo server` 会自动覆盖它，不需要为此改动
+baseURL = 'https://0127yy-cloud.github.io/tech-blog/'
 title = 'NEXUS'
 theme = 'nexus'
 

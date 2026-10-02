@@ -153,7 +153,7 @@ test result: ok. 12 passed; 0 failed
 
 | 键 | 作用 |
 | --- | --- |
-| `baseURL` | **上线前必须改**成真实域名，否则 canonical / og:url / sitemap 全指错 |
+| `baseURL` | 已设为线上地址 `https://0127yy-cloud.github.io/tech-blog/`。换域名或改仓库名后必须同步，否则 canonical / og:url / sitemap 全指错 |
 | `title` / `[params] tagline` | 站点名与副标题 |
 | `[params] description` | 首页与默认 meta description |
 | `[params] author` / `authorRole` / `location` / `email` | 页脚、JSON-LD、关于页署名 |
@@ -188,14 +188,21 @@ test result: ok. 12 passed; 0 failed
 
 ## 部署到 GitHub Pages
 
-`.github/workflows/hugo.yml` 已经写好，推到 `main` 分支即自动发布。
+- 仓库：<https://github.com/0127yy-cloud/tech-blog>
+- 线上地址：**<https://0127yy-cloud.github.io/tech-blog/>**
 
-1. 在仓库 **Settings → Pages** 里把 Source 设为 **GitHub Actions**
-2. 首次推送后工作流会构建并部署
-3. 工作流用 `configure-pages` 提供的 `base_url` 覆盖 `--baseURL`，所以项目站点
-   （`https://user.github.io/repo/` 这种带子路径的情况）不需要手改配置
+推送到 `main` 分支即自动构建并发布，工作流是 `.github/workflows/hugo.yml`：
 
-工作流里 `HUGO_VERSION` 是钉住的，升级本地版本时记得同步——README 末尾记录了验证过的版本。
+1. `actions/configure-pages` 给出 `base_url`，工作流用它覆盖 `--baseURL`，
+   因此同一份配置既适用于用户站点（`user.github.io`）也适用于项目站点（`user.github.io/repo/`）
+2. `upload-pages-artifact` 上传 `public/`，`deploy-pages` 完成发布
+3. 仓库的 Pages **Source 已设为 GitHub Actions**（如需手动核对：Settings → Pages → Source）
+
+注意 `actions/checkout` 必须带 `fetch-depth: 0`：`enableGitInfo = true` 依赖完整历史，
+浅克隆会让每页的 `lastmod` 失去意义。
+
+工作流里的 `HUGO_VERSION` 是钉住的（当前 `0.167.0`），升级本地版本时记得同步——
+README 末尾记录了验证过的版本。
 
 其他托管平台（Netlify / Vercel / Cloudflare Pages）只需要：
 
