@@ -3,7 +3,7 @@ title = '剧本分镜分析脚本'
 linkTitle = '分镜分析脚本'
 description = '把人工写的分镜表批量扩写成可拍摄的镜头技术描述：时长、出场角色、环境背景、景别、机位、构图、运镜逐字段解析后重新组装。'
 date = 2026-10-02
-weight = 60
+weight = 50
 [params]
   status = 'wip'
   stack = ['Python', 'PowerShell', 'faster-whisper']

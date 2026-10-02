@@ -3,7 +3,7 @@ title = '云枢 ERP 演示页'
 linkTitle = 'ERP 演示页'
 description = '一个 HTML 文件就能演示的 ERP 原型：十个业务模块、内联 SVG 手绘图表、零依赖离线可跑，用于需求评审而不是生产。'
 date = 2026-09-03
-weight = 50
+weight = 40
 [params]
   status = 'wip'
   stack = ['HTML', 'CSS', 'ES5 JavaScript', '内联 SVG']

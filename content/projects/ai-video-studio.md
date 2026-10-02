@@ -3,7 +3,7 @@ title = 'AI Video Studio'
 linkTitle = 'AI Video Studio'
 description = '暗黑影视工作站风格的 AI 视频创作平台：从剧本、分镜、素材到成片的一条链路，Next.js 15 + Prisma + Supabase 全栈实现。'
 date = 2026-05-13
-weight = 30
+weight = 20
 [params]
   status = 'wip'
   stack = ['Next.js 15', 'React 19', 'TypeScript', 'Prisma', 'Supabase', 'Tailwind']

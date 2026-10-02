@@ -3,7 +3,7 @@ title = 'AI 辅助做游戏'
 linkTitle = 'AI 做游戏'
 description = '三个用 AI 辅助开发的游戏：Godot 即时战略、生物收集回合制、Python 弹幕肉鸽，从策划文档到可执行包都在仓库里。'
 date = 2026-09-18
-weight = 40
+weight = 30
 [params]
   status = 'active'
   stack = ['Godot 4.6', 'GDScript', 'Python', 'HTML5']

@@ -3,7 +3,7 @@ title = 'Agent 工作流工具集'
 linkTitle = 'Agent 工具集'
 description = '四个自用的代理技能：把微信群聊提炼成飞书日报、给 Windows 版 Codex 换界面皮肤、批量归档飞书文档、以及可灵 AI 生成能力的命令行封装。'
 date = 2026-09-28
-weight = 20
+weight = 10
 [params]
   status = 'wip'
   stack = ['Agent Skills', 'PowerShell', 'Node.js', '飞书 API', '可灵 MCP']

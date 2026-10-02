@@ -69,8 +69,8 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 ├── content/
 │   ├── _index.md              # 首页（正文会渲染在 hero 下方）
 │   ├── about.md               # /about/
-│   ├── posts/                 # /posts/ —— 2 篇文章 + _index.md
-│   └── projects/              # /projects/ —— 6 个项目 + _index.md
+│   ├── posts/                 # /posts/ —— 1 篇文章 + _index.md
+│   └── projects/              # /projects/ —— 5 个项目 + _index.md
 ├── layouts/
 │   └── baseof.html            # ★ 契约层：骨架与块名，见下一节
 ├── static/
@@ -95,23 +95,30 @@ GitHub Actions 跑在 Linux 上，与这条无关。
 
 | weight | 页面 | status | 仓库 |
 | --- | --- | --- | --- |
-| 10 | [Nova 知识库](content/projects/nova.md) | `active` | `hencter/Nova`（上游） |
-| 20 | [Agent 工作流工具集](content/projects/agent-toolkit.md) | `wip` | 待拆仓 |
-| 30 | [AI Video Studio](content/projects/ai-video-studio.md) | `wip` | 本地 |
-| 40 | [AI 辅助做游戏](content/projects/ai-games.md) | `active` | `0127yy-cloud/ai-games` |
-| 50 | [云枢 ERP 演示页](content/projects/erp-demo.md) | `wip` | 本地 |
-| 60 | [剧本分镜分析脚本](content/projects/script-analysis.md) | `wip` | 本地 |
+| 10 | [Agent 工作流工具集](content/projects/agent-toolkit.md) | `wip` | 待拆仓 |
+| 20 | [AI Video Studio](content/projects/ai-video-studio.md) | `wip` | 本地 |
+| 30 | [AI 辅助做游戏](content/projects/ai-games.md) | `active` | `0127yy-cloud/ai-games` |
+| 40 | [云枢 ERP 演示页](content/projects/erp-demo.md) | `wip` | 本地 |
+| 50 | [剧本分镜分析脚本](content/projects/script-analysis.md) | `wip` | 本地 |
 
-`content/posts/` 共 2 篇，按日期倒序，都是项目实践的正文：
+`weight` 从 10 起、步长 10，连续不留空位——前一个项目（Nova 知识库）移除后已重新编号，
+避免出现「权重跳号但中间没有页面」的误导。
+
+`content/posts/` 只剩 1 篇：
 
 - [E 盘开源体检](content/posts/open-source-audit.md)（2026-10-03）—— 开源判据与三档清单的方法论
-- [让代理维护知识库](content/posts/nova-knowledge-base.md)（2026-09-25）—— Nova 的分层设计与三条约束
 
-> 站点内容经历过两次清理：早期的 4 个项目页（`tracelens` / `quincy` / `helios` / `dsh-tools`）
-> 与全部作者身份字段是虚构示例，已替换为真实项目与 `koibunny` 身份；
-> 另有 6 篇骨架阶段写的示例长文（eBPF、Go 泛型、LSM-Tree、Multi-Paxos、CI 可观测性、Raft 选型）
-> 已整体删除——它们页面上的实测数字与故障时间线都是构造的，不对应真实经历。
-> 当前 `posts/` 里剩下的内容全部对应真实项目与实践。
+> 站点内容经历过三次清理，每次都是**把不属于自己的内容拿掉**：
+>
+> 1. 早期的 4 个项目页（`tracelens` / `quincy` / `helios` / `dsh-tools`）与全部作者身份字段是
+>    虚构示例，替换为真实项目与 `koibunny` 身份；
+> 2. 6 篇骨架阶段的示例长文（eBPF、Go 泛型、LSM-Tree、Multi-Paxos、CI 可观测性、Raft 选型）
+>    整体删除——页面上的实测数字与故障时间线都是构造的；
+> 3. Nova 项目页与配套文章删除——那套知识库不是本站作者的作品，
+>    放在署自己名字的项目清单里等于占用别人的成果。
+>
+> 判据可以复述成一句：**能被说成「我做的」的东西才留在清单里。**
+> 用别人的仓库、别人的技能包、别人的代码时，正确的位置是正文里的引用与致谢，不是项目页。
 
 ### 为什么 `layouts/` 只有一个文件
 
@@ -272,16 +279,16 @@ hugo v0.167.0-3fff6fb5c267dacb26280c78dbe8c344054249c8+extended windows/amd64
 （`resources.Get` / `resources.Concat` / `minify` / `fingerprint`），没有用 `css.Build` 或 SCSS，
 所以标准版 Hugo 也能构建。`min` 的依据是 0.158.0 起 `languageCode` 改名 `locale` 且 `.Locale` 可用。
 
-本仓库通过的确切检查（2026-10-03 删除示例文章后重跑）：
+本仓库通过的确切检查（2026-10-03 移除 Nova 后重跑）：
 
 | 检查 | 命令 | 结果 |
 | --- | --- | --- |
 | 严格构建 | `hugo --ignoreCache --cleanDestinationDir --panicOnWarning --printPathWarnings --printUnusedTemplates --printI18nWarnings` | 退出码 0，0 警告、0 路径冲突、0 未使用模板 |
-| 内容清单 | `hugo list all` | 13 行（1 行表头 + 12 个内容页），与 `content/` 里 12 个 `.md` 一一对应 |
-| 产物齐全 | 逐个核对 `public/` | 9/9 非索引内容页都有对应 `index.html` |
+| 内容清单 | `hugo list all` | 11 行（1 行表头 + 10 个内容页），与 `content/` 里 10 个 `.md` 一一对应 |
+| 产物齐全 | 逐个核对 `public/` | 7/7 非索引内容页都有对应 `index.html` |
 | 生产环境 | `hugo`（默认 `production`） | `robots.txt` 为 `Allow: /`，页面 `index, follow` |
 | 开发环境 | `hugo -e development` | `robots.txt` 为 `Disallow: /`，页面 `noindex, nofollow` |
-| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 22 个 HTML、24 个站内 URL，0 断链 |
+| 内部链接 | 遍历 `public/` 收集 `href`，去掉 `baseURL` 前缀并做 URL 解码后逐个验证目标存在 | 18 个 HTML、20 个站内 URL，0 断链 |
 | 结构化数据 | 用真实 JSON 解析器解析 JSON-LD | 解析通过：首页 `@type=WebSite`，文章与项目页 `@type=BlogPosting` |
 | 短代码转义 | 在 `content/` 里搜可疑分隔符写法与占位字面量 | 无可疑写法，无 `HAHAHUGOSHORTCODE` |
 | 身份占位符 | 在 `public/` 全文搜 `Your Name` / `yourname` / `you@example` | 0 命中 |
@@ -316,9 +323,10 @@ hugo gen chromastyles --style tokyonight-night > themes/nexus/assets/css/syntax.
 - **只做深色**。没有明暗切换开关，`color-scheme` 固定为 `dark`。
 - **没有站内搜索**。静态站点要做搜索需要额外的索引文件或第三方服务，当前刻意留空。
 - **没有图片资源**。视觉全部由 CSS 渐变与几何图形构成，所以仓库里没有二进制素材。
-- **文章数量少**。`posts/` 目前只有 2 篇，都是 2026-09 / 10 写的项目实践正文。
-  骨架阶段那 6 篇示例长文已删除，因为其中的实测数字与故障时间线是构造的，
-  留着等于把虚构内容混进真实项目介绍里。文章要重新积累。
+- **文章数量少**。`posts/` 目前只剩 1 篇（[E 盘开源体检](content/posts/open-source-audit.md)）。
+  骨架阶段那 6 篇示例长文因实测数字与故障时间线是构造的而整体删除；
+  Nova 那篇因题材不属于本站作者而删除。文章需要从头积累——
+  这是「只留自己能负责的内容」的必然代价，属于有意选择而非缺陷。
 - **构建环境已修复，但不是零成本**。`%LOCALAPPDATA%\Temp\hugo_cache` 目前已预建，
   `hugo` 可直接运行；如果该目录被清理工具删掉，需要按「构建环境备注」重建一次。
 - **`categories` 分类法已启用但页脚没有入口**。术语页本身会生成并进入 sitemap；
