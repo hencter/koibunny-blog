@@ -24,15 +24,17 @@ summaryLength = 70
 enableRobotsTXT = true
 enableGitInfo = true
 
-# ── 构建环境备注 ─────────────────────────────────────────────────────────────
-# 这台机器上 `%LOCALAPPDATA%\Temp\hugo_cache` 被拒绝创建，Hugo 在加载配置阶段就 panic：
+# ── 构建环境备注（2026-10-03 已修复） ───────────────────────────────────────
+# 曾出现：`hugo` 在加载配置阶段直接 panic
 #   ERROR failed to load config: mkdir C:\...\Temp\hugo_cache: Access is denied.
+# 根因是 `%LOCALAPPDATA%\Temp\hugo_cache` 这个**目录创建**被本机策略拒绝，不是权限缺失：
+# 同名目录一旦存在，Hugo 读写它完全正常。修复方式就是预建该目录。
 # 该路径由 Hugo 的 GetCacheDir 推导，命令行 --cacheDir 无法覆盖（会对其它子目录拼接成相对路径）。
-# 已验证的三种绕过方式（任选其一）：
-#   $env:TMPDIR = 'E:\DeepSeekHarnessWork\.tooling\hugotmp'   # 临时目录指向可写位置
+# 若在别的机器上复现，三种方式任选其一：
+#   New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\Temp\hugo_cache"   # 首选，根治
+#   $env:TMPDIR = 'E:\DeepSeekHarnessWork\.tooling\hugotmp'                    # 临时目录改到可写位置
 #   hugo --source <站点目录> --cacheDir <绝对可写目录>
-#   修复 %LOCALAPPDATA%\Temp 下的 ACL 后即可直接用 `hugo`
-# GitHub Actions 跑在 Linux 上，不受影响。
+# GitHub Actions 跑在 Linux 上，与这条无关。
 
 # ── 参数 ─────────────────────────────────────────────────────────────────────
 [params]

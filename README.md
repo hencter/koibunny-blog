@@ -26,31 +26,29 @@ E:\DeepSeekHarnessWork\.tooling\hugo\hugo.exe --gc --minify
 
 如果 `hugo` 已经在你自己的 PATH 上，把上面的完整路径换成 `hugo` 即可。
 
-### 这台机器上的构建环境备注（重要）
+### 构建环境备注（2026-10-03 已修复）
 
-`hugo` 在本机**不带参数**运行会直接崩溃，发生在加载配置阶段：
+`hugo` 在本机曾**不带参数**运行就崩溃，发生在加载配置阶段：
 
 ```text
 ERROR failed to load config: mkdir C:\Users\<用户名>\AppData\Local\Temp\hugo_cache: Access is denied.
 ```
 
-原因是 Hugo 的 `GetCacheDir` 推导出的系统临时目录子路径被拒绝创建。
-这个路径**不能用 `--cacheDir` 覆盖**——实测它会与 Hugo 内部的其它缓存子目录拼接成
-`.hugo_cache\<站点名>` 这样的相对路径，然后报 `must resolve to an absolute directory`。
-
-三种已验证的绕过方式，任选其一：
+根因不是权限缺失，而是这个**目录创建动作**被本机策略拒绝：同名目录一旦存在，
+Hugo 对它的读写完全正常。所以修复方式就是预建该目录（已执行，当前 `hugo` 裸跑正常）：
 
 ```powershell
-# 1) 临时目录指向可写位置（临时生效，推荐日常使用）
-$env:TMPDIR = 'E:\DeepSeekHarnessWork\.tooling\hugotmp'
-
-# 2) 命令行显式给出站点目录与缓存目录（两者都要绝对路径）
-hugo --source 'E:\DeepSeekHarnessWork\博客网站' --cacheDir 'E:\DeepSeekHarnessWork\.tooling\hugocache'
-
-# 3) 修复 %LOCALAPPDATA%\Temp 下的 ACL 后，即可直接用 `hugo`
+New-Item -ItemType Directory -Force "$env:LOCALAPPDATA\Temp\hugo_cache"
 ```
 
-GitHub Actions 跑在 Linux 上，不受这条影响；README 末尾的验证记录是按方式 1 得到的。
+两条容易踩的关联事实：
+
+- 该路径由 Hugo 的 `GetCacheDir` 推导，**不能用 `--cacheDir` 覆盖**——实测它会与 Hugo 内部的
+  其它缓存子目录拼接成 `.hugo_cache\<站点名>`，然后报 `must resolve to an absolute directory`；
+- 换机器复现时，除了预建目录，也可以把 `$env:TMPDIR` 指向任意可写位置，
+  或用 `hugo --source <站点目录> --cacheDir <绝对可写目录>`。
+
+GitHub Actions 跑在 Linux 上，与这条无关。
 
 预览地址默认是 <http://localhost:1313/>。
 
@@ -318,9 +316,8 @@ hugo gen chromastyles --style tokyonight-night > themes/nexus/assets/css/syntax.
   CI 可观测性、Raft 选型这 6 篇是站点骨架阶段写的示例长文，里面的实测数字与故障时间线
   都是构造的，不对应真实经历。它们是模板演示，不是事实陈述——保留是为了压测模板的排版与
   目录、代码高亮、短代码组合，发布前应逐篇替换为真实内容或删除。
-- **本机构建需要绕过系统临时目录**。见「这台机器上的构建环境备注」：该机器上
-  `%LOCALAPPDATA%\Temp` 下的 `hugo_cache` 被拒绝创建，需要设 `TMPDIR`、给
-  `--source` + `--cacheDir`，或修复 ACL。
+- **构建环境已修复，但不是零成本**。`%LOCALAPPDATA%\Temp\hugo_cache` 目前已预建，
+  `hugo` 可直接运行；如果该目录被清理工具删掉，需要按「构建环境备注」重建一次。
 - **`categories` 分类法已启用但页脚没有入口**。术语页本身会生成并进入 sitemap；
   如果不想要，在 `hugo.toml` 里设 `disableKinds = ['taxonomy', 'term']` 会同时删掉 `tags` 页。
 - **`.Date` 一律用 `not .IsZero` 守卫**。`time.Time` 是结构体，`with .Date` 永远为真，
