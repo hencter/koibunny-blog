@@ -17,7 +17,7 @@
 <article class="project-card" data-search-card data-search="{{ $p.LinkTitle }} {{ $summary }} {{ delimit $p.Params.stack " " }}">
   <div class="card-visual hue-{{ mod (len $p.LinkTitle) 6 }}">
     <span class="visual-chip">PROJECT</span>
-    <span class="mini-rabbit" aria-hidden="true">🐰</span>
+    <span class="mini-rabbit" aria-hidden="true">{{ partial "icon.html" (dict "name" "rabbit") }}</span>
   </div>
   <div class="project-card-body">
     <div class="project-card-head">

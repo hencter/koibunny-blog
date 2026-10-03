@@ -1,0 +1,3 @@
+{{- $name := .name | default . -}}
+{{- $class := .class | default "" -}}
+<svg class="ui-icon icon-{{ $name }}{{ with $class }} {{ . }}{{ end }}" aria-hidden="true" focusable="false"><use href="{{ "icons/koi-icons.svg" | relURL }}#{{ $name }}"></use></svg>

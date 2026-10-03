@@ -13,10 +13,10 @@
         <span>这里记录我自己会回头查的笔记：能跑起来的实验、</span>
         <span>读过源码后的结论、以及踩过的坑。</span>
       </p>
-      <p class="note-banner"><span aria-hidden="true">💡</span>{{ site.Params.heroNote | default "不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。" }}</p>
+      <p class="note-banner"><span class="note-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "lightbulb") }}</span>{{ site.Params.heroNote | default "不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。" }}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#latest-notes">▣ 看最新笔记 <span aria-hidden="true">→</span></a>
-        <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">🐰 关于 KoiBunny</a>
+        <a class="btn btn-primary" href="#latest-notes">{{ partial "icon.html" (dict "name" "article") }}看最新笔记 <span aria-hidden="true">→</span></a>
+        <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">{{ partial "icon.html" (dict "name" "rabbit") }}关于 KoiBunny</a>
       </div>
     </div>
   </section>
@@ -25,7 +25,7 @@
     <div class="section-head">
       <div class="section-head-main">
         <p class="section-kicker">LATEST NOTES</p>
-        <h2 class="section-title">🌱 最新文章</h2>
+        <h2 class="section-title">{{ partial "icon.html" (dict "name" "sprout") }}最新文章</h2>
       </div>
       <a class="section-more" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">查看更多 <span aria-hidden="true">→</span></a>
     </div>
@@ -34,22 +34,22 @@
       {{- range first 4 $posts }}{{ partial "post-card.html" (dict "page" .) }}{{ end }}
     </div>
     {{- else }}
-    <div class="empty-state">🐰 文章还在路上，先去看看项目实践吧。</div>
+    <div class="empty-state">{{ partial "icon.html" (dict "name" "rabbit") }}文章还在路上，先去看看项目实践吧。</div>
     {{- end }}
-    <div class="empty-state" data-search-empty hidden>🐰 没找到匹配内容，换个关键词试试。</div>
+    <div class="empty-state" data-search-empty hidden>{{ partial "icon.html" (dict "name" "rabbit") }}没找到匹配内容，换个关键词试试。</div>
   </section>
 
   <nav class="category-strip" aria-label="内容分类">
-    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">⚗</span><span class="category-text"><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">📖</span><span class="category-text"><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">🔧</span><span class="category-text"><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card" href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}"><span class="category-icon" aria-hidden="true">🗺</span><span class="category-text"><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card category-experiment" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "test-tube") }}</span><span class="category-text"><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card category-reading" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "book-open") }}</span><span class="category-text"><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card category-tools" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "tools") }}</span><span class="category-text"><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card category-roadmap" href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "map") }}</span><span class="category-text"><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span><i aria-hidden="true">›</i></a>
   </nav>
 
   {{- with $projects }}
   <section class="section-block project-section">
     <div class="section-head">
-      <div class="section-head-main"><p class="section-kicker">SELECTED WORK</p><h2 class="section-title">▣ 项目实践</h2></div>
+      <div class="section-head-main"><p class="section-kicker">SELECTED WORK</p><h2 class="section-title">{{ partial "icon.html" (dict "name" "briefcase") }}项目实践</h2></div>
       <a class="section-more" href="{{ partial "site-url.html" (dict "site" site "pageRef" "projects") }}">全部项目 <span aria-hidden="true">→</span></a>
     </div>
     <div class="project-grid" data-search-grid>{{- range first 3 . }}{{ partial "project-card.html" (dict "page" .) }}{{ end }}</div>
@@ -57,7 +57,7 @@
   {{- end }}
 
   <section class="about-panel">
-    <div class="about-rabbit" aria-hidden="true">🐰</div>
+    <div class="about-rabbit" aria-hidden="true">{{ partial "icon.html" (dict "name" "rabbit") }}</div>
     <div><p class="section-kicker">ABOUT KoiBunny</p><h2>这是一个给自己长期复用的 AI 笔记库</h2><p>我更关心“为什么能工作”和“怎样复现”，而不是追逐每天的新名词。每篇内容尽量留下代码、流程、上下文和失败记录。</p></div>
     <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">认识我 <span aria-hidden="true">→</span></a>
   </section>

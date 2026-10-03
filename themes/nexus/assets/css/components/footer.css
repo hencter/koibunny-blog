@@ -52,10 +52,13 @@
   width: 36px;
   height: 36px;
   flex: none;
-  font-size: 20px;
+  color: #b85d2e;
+  font-size: 22px;
   background: #ffe6ba;
   border: 2px solid var(--brown-900);
 }
+
+.footer-badge .ui-icon { width: 1em; height: 1em; }
 
 .footer-tagline {
   margin-top: 10px;

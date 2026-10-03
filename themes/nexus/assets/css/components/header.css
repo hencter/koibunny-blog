@@ -71,12 +71,15 @@
   width: 42px;
   height: 42px;
   flex: none;
-  font-size: 24px;
+  color: #3f271d;
+  font-size: 34px;
   line-height: 1;
   background: #ffe6ba;
   border: var(--hair) solid var(--brown-900);
   box-shadow: var(--sh-1);
 }
+
+.brand-badge .ui-icon { width: 1em; height: 1em; overflow: visible; }
 
 .brand-text {
   display: flex;
@@ -118,8 +121,8 @@
   background: transparent;
 }
 
-.search-icon { font-size: 1.25rem; font-weight: 900; }
-.search-carrot { line-height: 1; }
+.search-icon { display: inline-flex; font-size: 1.15rem; font-weight: 900; }
+.search-carrot { display: inline-flex; font-size: 1.35rem; line-height: 1; transform: rotate(-8deg); }
 
 /* ── 导航：桌面端每项一块像素牌，当前项是黄底 ───────────────────────────── */
 
@@ -166,8 +169,11 @@
 }
 
 .menu-icon {
-  font-size: 0.95em;
+  width: 1.7em;
+  height: 1.7em;
+  font-size: 1em;
   line-height: 1;
+  overflow: visible;
 }
 
 .nav-rss {

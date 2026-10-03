@@ -18,11 +18,11 @@
 {{- $page := .page -}}
 {{- $class := .class | default "menu" -}}
 {{- $icons := dict
-  "首页" "⌂"
-  "笔记文章" "▤"
-  "项目实践" "▣"
-  "标签" "🏷"
-  "关于我" "🐰"
+  "首页" "home"
+  "笔记文章" "article"
+  "项目实践" "briefcase"
+  "标签" "tag"
+  "关于我" "rabbit"
 -}}
 {{- with index site.Menus .menuID -}}
 <ul class="{{ $class }}">
@@ -30,9 +30,9 @@
     {{- $active := or ($page.IsMenuCurrent .Menu .) ($page.HasMenuCurrent .Menu .) -}}
     {{- $url := .URL -}}
     {{- with .Page }}{{ $url = .RelPermalink }}{{ end -}}
-    {{- $icon := index $icons .Name | default "▤" -}}
+    {{- $icon := index $icons .Name | default "article" -}}
     <li class="menu-item{{ if $active }} is-active{{ end }}">
-      <a href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}><span class="menu-icon" aria-hidden="true">{{ $icon }}</span>{{ .Name }}</a>
+      <a href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" $icon "class" "menu-icon") }}{{ .Name }}</a>
     </li>
   {{- end -}}
 </ul>

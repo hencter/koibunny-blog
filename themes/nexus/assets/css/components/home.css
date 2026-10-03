@@ -113,6 +113,12 @@
   box-shadow: 3px 3px 0 rgba(90,47,34,.76);
 }
 
+.note-icon {
+  display: inline-flex;
+  color: #e6a312;
+  font-size: 1.15em;
+}
+
 .hero-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
 
 .hero-actions .btn {
@@ -122,6 +128,9 @@
   font-family: "Noto Sans SC", "Microsoft YaHei UI", "Microsoft YaHei", "PingFang SC", sans-serif;
   letter-spacing: .01em;
 }
+
+.hero-actions .ui-icon { width: 1.85em; height: 1.85em; overflow: visible; }
+.hero-actions .icon-rabbit { color: #63372a; }
 
 .section-block {
   position: relative;
@@ -140,6 +149,7 @@
 }
 
 .section-title { color: var(--navy); font-size: clamp(1.5rem, 2.2vw, 2.05rem); }
+.section-title .ui-icon { width: 1.15em; height: 1.15em; overflow: visible; }
 .section-more { color: #1780bf; font-weight: 900; }
 .section-more:hover { color: var(--orange-deep); }
 
@@ -176,6 +186,11 @@
 
 .category-card:hover { color: inherit; background: #fff4cc; transform: translate(2px,2px); box-shadow: 2px 2px 0 #c4ae82; }
 .category-icon { display: grid; place-items: center; width: 48px; height: 48px; font-size: 1.7rem; background: #ffe5a8; border: 2px solid #6a4933; }
+.category-icon .ui-icon { width: 1.18em; height: 1.18em; overflow: visible; }
+.category-experiment .category-icon { background: #dff2ff; }
+.category-reading .category-icon { background: #ffedc9; }
+.category-tools .category-icon { background: #e4eaff; }
+.category-roadmap .category-icon { background: #dcf4df; }
 .category-text { display: grid; gap: 3px; }
 .category-text b { color: #233750; font-size: 1.05rem; }
 .category-text small { color: #7b7770; line-height: 1.35; }
@@ -190,7 +205,8 @@
   background: linear-gradient(135deg, #dff5ff, #fff2cf);
 }
 
-.about-rabbit { display: grid; place-items: center; width: 110px; height: 110px; font-size: 4.25rem; background: #fff9df; border: 4px solid #5f3b29; box-shadow: 6px 6px 0 #c68f4c; }
+.about-rabbit { display: grid; place-items: center; width: 110px; height: 110px; color: #b85d2e; font-size: 4.25rem; background: #fff9df; border: 4px solid #5f3b29; box-shadow: 6px 6px 0 #c68f4c; }
+.about-rabbit .ui-icon { width: .86em; height: .86em; }
 .about-panel h2 { color: var(--navy); font-size: clamp(1.45rem, 2.2vw, 2rem); }
 .about-panel p:last-child { max-width: 850px; margin-top: 10px; color: var(--ink-soft); line-height: 1.8; }
 

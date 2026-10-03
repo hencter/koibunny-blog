@@ -157,6 +157,18 @@ svg {
   display: block;
 }
 
+.ui-icon {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  flex: none;
+  overflow: visible;
+  color: currentColor;
+  fill: currentColor;
+  vertical-align: -0.14em;
+  shape-rendering: crispEdges;
+}
+
 code,
 kbd,
 pre,

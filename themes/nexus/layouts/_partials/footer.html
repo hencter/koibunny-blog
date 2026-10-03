@@ -7,7 +7,7 @@
 {{- $author := site.Params.author | default site.Title -}}
 <div class="footer-inner">
   <div class="footer-brand">
-    <p class="footer-title"><span class="footer-badge" aria-hidden="true">🐰</span>{{ site.Title }}</p>
+    <p class="footer-title"><span class="footer-badge" aria-hidden="true">{{ partial "icon.html" (dict "name" "rabbit") }}</span>{{ site.Title }}</p>
     {{- with site.Params.tagline }}<p class="footer-tagline">{{ . }}</p>{{ end }}
     {{- with site.Params.location }}<p class="footer-location">{{ . }}</p>{{ end }}
   </div>
@@ -42,6 +42,7 @@
   </p>
   <p class="footer-meta">
     <span>Hugo {{ hugo.Version }}</span>
+    <span class="icon-credits">图标：KoiBunny 多色像素 SVG</span>
     <a href="{{ partial "site-url.html" (dict "site" site "file" "sitemap.xml") }}">站点地图</a>
     <a href="{{ partial "site-url.html" (dict "site" site "output" "rss") }}">RSS</a>
     {{- with .GitInfo }}
