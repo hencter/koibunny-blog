@@ -40,8 +40,8 @@
             {{- with .Params.stack }}
             <ul class="stack">{{ range . }}<li>{{ . }}</li>{{ end }}</ul>
             {{- end }}
-            {{- with .Params.repo }}<a class="btn btn-sm" href="{{ . }}" target="_blank" rel="noopener">源码<span aria-hidden="true"> ↗</span></a>{{ end }}
-            {{- with .Params.demo }}<a class="btn btn-sm" href="{{ . }}" target="_blank" rel="noopener">演示<span aria-hidden="true"> ↗</span></a>{{ end }}
+            {{- with .Params.repo }}<a class="btn btn-sm svg-button" href="{{ . }}" target="_blank" rel="noopener">{{ partial "button-frame.html" (dict "id" "project-source" "variant" "cream") }}<span class="button-content">源码<span aria-hidden="true"> ↗</span></span></a>{{ end }}
+            {{- with .Params.demo }}<a class="btn btn-sm svg-button" href="{{ . }}" target="_blank" rel="noopener">{{ partial "button-frame.html" (dict "id" "project-demo" "variant" "gold") }}<span class="button-content">演示<span aria-hidden="true"> ↗</span></span></a>{{ end }}
           </div>
           {{- end }}
         </header>

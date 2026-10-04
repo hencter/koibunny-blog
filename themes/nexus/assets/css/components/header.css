@@ -146,26 +146,26 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 12px;
+  min-height: 48px;
+  padding: 8px 14px 11px;
   font-size: 0.92rem;
   font-weight: 800;
   color: #ffeac7;
-  border: 2px solid transparent;
+  border: 0;
   transition: color 0.14s ease, background-color 0.14s ease, box-shadow 0.14s ease;
 }
 
 .menu-item a:hover {
-  color: var(--brown-900);
-  background: #ffd473;
-  border-color: var(--brown-900);
-  box-shadow: inset -3px -3px 0 rgba(140, 80, 0, 0.18), var(--sh-1);
+  color: #fff5d9;
+  background: transparent;
+  box-shadow: none;
+  transform: translate(1px, 1px);
 }
 
 .menu-item.is-active a {
   color: var(--brown-900);
-  background: var(--yellow);
-  border-color: var(--brown-900);
-  box-shadow: inset -3px -3px 0 rgba(140, 80, 0, 0.18), var(--sh-1);
+  background: transparent;
+  box-shadow: none;
 }
 
 .menu-icon {
@@ -203,11 +203,13 @@
   padding: 0;
   align-items: center;
   justify-content: center;
-  background: #78432e;
-  border: var(--hair) solid var(--brown-900);
-  box-shadow: var(--sh-1);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   cursor: pointer;
 }
+
+.nav-toggle > .button-content { width: 100%; height: 100%; }
 
 .nav-toggle-bars {
   display: grid;

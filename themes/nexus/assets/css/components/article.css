@@ -395,14 +395,16 @@
   top: 8px;
   right: 8px;
   z-index: 2;
-  padding: 4px 10px;
+  min-width: 62px;
+  min-height: 30px;
+  padding: 4px 11px 6px;
   font-family: var(--font-mono);
   font-size: 0.7rem;
   font-weight: 700;
   color: var(--brown-700);
-  background: var(--cream);
-  border: 2px solid var(--brown-900);
-  box-shadow: 2px 2px 0 var(--brown-900);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
   cursor: pointer;
   opacity: 0;
   transition: opacity 0.16s ease, background-color 0.16s ease;
@@ -414,14 +416,19 @@
 }
 
 .copy-btn:hover {
-  background: var(--yellow);
+  background: transparent;
 }
+
+.copy-btn .button-frame-face { fill: var(--cream); }
+.copy-btn:hover .button-frame-face { fill: var(--yellow); }
 
 .copy-btn.is-done {
   color: var(--brown-900);
-  background: #cdeecb;
+  background: transparent;
   opacity: 1;
 }
+
+.copy-btn.is-done .button-frame-face { fill: #cdeecb; }
 
 /* ── 提示框（callout 短代码） ──────────────────────────────────────────── */
 
@@ -507,9 +514,12 @@
 
 .prevnext {
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 28px;
+  grid-template-columns: repeat(2, minmax(0, 250px));
+  justify-content: space-between;
+  gap: 14px;
+  width: 100%;
+  max-width: calc(var(--wrap) + var(--pad) * 2);
+  margin: 28px auto 0;
 }
 
 .prevnext-item {
@@ -536,6 +546,29 @@ a.prevnext-item:hover {
   background: #fffbe8;
 }
 
+.prevnext-item.svg-button {
+  min-width: 0;
+  min-height: 62px;
+  padding: 10px 14px 12px;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.prevnext-item.svg-button > .button-content {
+  width: 100%;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 6px;
+}
+
+a.prevnext-item.svg-button:hover {
+  background: transparent;
+  box-shadow: none;
+}
+
+a.prevnext-item.svg-button:hover .button-frame-face { fill: #fffbe8; }
+
 .prevnext-next {
   text-align: right;
 }
@@ -548,9 +581,15 @@ a.prevnext-item:hover {
 }
 
 .prevnext-title {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
   color: var(--navy);
-  font-size: 0.98rem;
-  line-height: 1.5;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ── 404 ───────────────────────────────────────────────────────────────── */

@@ -13,7 +13,8 @@
 {{- with $page.GetTerms .taxonomy -}}
 <ul class="tag-list">
   {{- range . }}
-  <li><a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+  {{- $tagID := md5 (printf "%s-%s" $page.RelPermalink .RelPermalink) -}}
+  <li><a class="tag svg-button" href="{{ .RelPermalink }}">{{ partial "button-frame.html" (dict "id" (printf "tag-%s" $tagID) "variant" "soft") }}<span class="button-content">#{{ .LinkTitle }}</span></a></li>
   {{- end }}
 </ul>
 {{- end -}}

@@ -146,6 +146,31 @@
   display: none;
 }
 
+/* 页脚是文字导航，不使用主导航的按钮底板。 */
+.footer-menu .button-frame { display: none; }
+.footer-menu .button-content { display: inline-flex; justify-content: flex-start; }
+.footer-menu .svg-button { min-height: 0; padding: 0; transform: none; }
+.footer-menu .svg-button:hover { color: var(--yellow); background: transparent; box-shadow: none; }
+
+/* 页脚当前栏目：覆盖顶部导航的深色选中态，确保在棕色底上清晰可见。 */
+.footer-menu .menu-item.is-active a {
+  color: #fff2bd;
+  font-weight: 900;
+  text-decoration: underline;
+  text-decoration-color: var(--yellow);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 5px;
+  text-shadow: 1px 1px 0 rgba(45, 22, 16, .8);
+}
+
+.footer-menu .menu-item.is-active a::before {
+  content: "◆";
+  margin-right: 5px;
+  color: var(--yellow);
+  font-size: .58em;
+  text-decoration: none;
+}
+
 .footer-base {
   display: flex;
   flex-wrap: wrap;

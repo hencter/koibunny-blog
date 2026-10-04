@@ -15,8 +15,11 @@
       </p>
       <p class="note-banner"><span class="note-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "lightbulb") }}</span>{{ site.Params.heroNote | default "不追热点，尽量把「为什么」写清楚；不能复现的结论，不会放在这里。" }}</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#latest-notes">{{ partial "icon.html" (dict "name" "article") }}看最新笔记 <span aria-hidden="true">→</span></a>
-        <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">{{ partial "icon.html" (dict "name" "rabbit") }}关于 KoiBunny</a>
+        <a class="btn btn-primary svg-button" href="#latest-notes">
+          {{ partial "button-frame.html" (dict "id" "hero-latest" "variant" "gold") }}
+          <span class="button-content">{{ partial "icon.html" (dict "name" "article") }}<span>看最新笔记</span><span aria-hidden="true">→</span></span>
+        </a>
+        <a class="btn svg-button" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">{{ partial "button-frame.html" (dict "id" "hero-about" "variant" "cream") }}<span class="button-content">{{ partial "icon.html" (dict "name" "rabbit") }}关于 KoiBunny</span></a>
       </div>
     </div>
   </section>
@@ -40,10 +43,10 @@
   </section>
 
   <nav class="category-strip" aria-label="内容分类">
-    <a class="category-card category-experiment" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "test-tube") }}</span><span class="category-text"><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card category-reading" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "book-open") }}</span><span class="category-text"><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card category-tools" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "tools") }}</span><span class="category-text"><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span><i aria-hidden="true">›</i></a>
-    <a class="category-card category-roadmap" href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "map") }}</span><span class="category-text"><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span><i aria-hidden="true">›</i></a>
+    <a class="category-card svg-button category-experiment" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">{{ partial "button-frame.html" (dict "id" "category-experiment" "variant" "cream") }}<span class="button-content"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "test-tube") }}</span><span class="category-text"><b>可复现实验</b><small>能跑的项目 · 完整步骤</small></span><i aria-hidden="true">›</i></span></a>
+    <a class="category-card svg-button category-reading" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">{{ partial "button-frame.html" (dict "id" "category-reading" "variant" "cream") }}<span class="button-content"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "book-open") }}</span><span class="category-text"><b>源码阅读</b><small>读源码 · 写结论 · 画图梳理</small></span><i aria-hidden="true">›</i></span></a>
+    <a class="category-card svg-button category-tools" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">{{ partial "button-frame.html" (dict "id" "category-tools" "variant" "cream") }}<span class="button-content"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "tools") }}</span><span class="category-text"><b>踩坑笔记</b><small>问题复盘 · 解决方法 · 避坑指南</small></span><i aria-hidden="true">›</i></span></a>
+    <a class="category-card svg-button category-roadmap" href="{{ partial "site-url.html" (dict "site" site "pageRef" "tags") }}">{{ partial "button-frame.html" (dict "id" "category-roadmap" "variant" "cream") }}<span class="button-content"><span class="category-icon" aria-hidden="true">{{ partial "icon.html" (dict "name" "map") }}</span><span class="category-text"><b>学习路径</b><small>AI 知识地图 · 长期积累</small></span><i aria-hidden="true">›</i></span></a>
   </nav>
 
   {{- with $projects }}
@@ -59,6 +62,6 @@
   <section class="about-panel">
     <div class="about-rabbit" aria-hidden="true">{{ partial "icon.html" (dict "name" "rabbit") }}</div>
     <div><p class="section-kicker">ABOUT KoiBunny</p><h2>这是一个给自己长期复用的 AI 笔记库</h2><p>我更关心“为什么能工作”和“怎样复现”，而不是追逐每天的新名词。每篇内容尽量留下代码、流程、上下文和失败记录。</p></div>
-    <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">认识我 <span aria-hidden="true">→</span></a>
+    <a class="btn svg-button" href="{{ partial "site-url.html" (dict "site" site "pageRef" "about") }}">{{ partial "button-frame.html" (dict "id" "about-more" "variant" "cream") }}<span class="button-content">认识我 <span aria-hidden="true">→</span></span></a>
   </section>
 {{ end }}

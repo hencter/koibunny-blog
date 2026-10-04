@@ -19,17 +19,17 @@
   {{- if or $prev $next }}
 <nav class="prevnext wrap" aria-label="上下篇">
     {{- with $prev }}
-  <a class="prevnext-item" href="{{ .RelPermalink }}">
-    <span class="prevnext-label"><span aria-hidden="true">←</span> 上一篇</span>
-    <span class="prevnext-title">{{ .LinkTitle }}</span>
+  <a class="prevnext-item svg-button" href="{{ .RelPermalink }}">
+    {{ partial "button-frame.html" (dict "id" "article-prev" "variant" "cream") }}
+    <span class="button-content"><span class="prevnext-label"><span aria-hidden="true">←</span> 上一篇</span><span class="prevnext-title">{{ .LinkTitle }}</span></span>
   </a>
     {{- else }}
   <span class="prevnext-item is-empty"></span>
     {{- end }}
     {{- with $next }}
-  <a class="prevnext-item prevnext-next" href="{{ .RelPermalink }}">
-    <span class="prevnext-label">下一篇 <span aria-hidden="true">→</span></span>
-    <span class="prevnext-title">{{ .LinkTitle }}</span>
+  <a class="prevnext-item prevnext-next svg-button" href="{{ .RelPermalink }}">
+    {{ partial "button-frame.html" (dict "id" "article-next" "variant" "cream") }}
+    <span class="button-content"><span class="prevnext-label">下一篇 <span aria-hidden="true">→</span></span><span class="prevnext-title">{{ .LinkTitle }}</span></span>
   </a>
     {{- else }}
   <span class="prevnext-item is-empty"></span>

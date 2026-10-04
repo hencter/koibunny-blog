@@ -232,18 +232,25 @@
 }
 
 .project-card-links a {
+  position: relative;
+  isolation: isolate;
   padding: 4px 10px;
   font-weight: 700;
   font-size: 0.8rem;
   color: var(--brown-700);
-  background: var(--cream-2);
-  border: 2px solid var(--brown-600);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .project-card-links a:hover {
   color: var(--brown-900);
-  background: var(--yellow);
+  background: transparent;
+  transform: translate(1px, 1px);
 }
+
+.project-card-links .button-frame { inset: -3px -2px -5px; }
+.project-card-links .button-content { gap: 3px; }
 
 /* ── 分页 ──────────────────────────────────────────────────────────────── */
 
@@ -263,24 +270,26 @@
 }
 
 .page-link {
+  position: relative;
+  isolation: isolate;
   padding: 8px 16px;
   font-weight: 700;
   color: var(--brown-700);
-  background: var(--paper);
-  border: 2px solid var(--brown-900);
-  box-shadow: 2px 2px 0 var(--brown-900);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
 }
 
 .page-link:hover {
   color: var(--brown-900);
-  background: var(--yellow);
+  background: transparent;
+  transform: translate(1px, 1px);
 }
 
 .page-link.is-disabled {
   color: var(--ink-faint);
   background: transparent;
-  border-style: dashed;
-  border-color: var(--sand);
+  border: 0;
   box-shadow: none;
   opacity: 0.7;
 }

@@ -100,17 +100,18 @@
 
     var button = document.createElement("button");
     button.type = "button";
-    button.className = "copy-btn";
-    button.textContent = "复制";
+    button.className = "copy-btn svg-button";
+    button.innerHTML = '<svg class="button-frame button-frame-cream" viewBox="0 0 224 64" preserveAspectRatio="none" aria-hidden="true"><path class="button-frame-shadow" d="M14 6H206Q210 6 213 9L216 12Q219 15 219 19V52Q219 55 216 58L214 60Q212 62 209 62H14Q10 62 8 60L6 58Q5 56 5 53V15Q5 12 7 10L10 7Q11 6 14 6Z"/><path class="button-frame-face" d="M12 2H204Q207 2 209 4L213 8Q215 10 215 13V48Q215 51 213 53L209 57Q207 59 204 59H12Q9 59 7 57L3 53Q1 51 1 48V13Q1 10 3 8L7 4Q9 2 12 2Z"/><path class="button-frame-highlight" d="M12 5H203Q206 5 208 7L210 9"/><path class="button-frame-shade" d="M212 15V47Q212 49 210 51L207 54Q205 56 202 56H13"/></svg><span class="button-content"><span class="copy-btn-label">复制</span></span>';
+    var label = button.querySelector(".copy-btn-label");
 
     button.addEventListener("click", function () {
       var text = code.innerText;
 
       var done = function (ok) {
-        button.textContent = ok ? "已复制" : "复制失败";
+        label.textContent = ok ? "已复制" : "复制失败";
         button.classList.toggle("is-done", ok);
         window.setTimeout(function () {
-          button.textContent = "复制";
+          label.textContent = "复制";
           button.classList.remove("is-done");
         }, 1600);
       };

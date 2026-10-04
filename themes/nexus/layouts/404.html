@@ -10,8 +10,8 @@
     </div>
 
     <div class="hero-actions">
-      <a class="btn btn-primary" href="{{ site.Home.RelPermalink }}">回到首页</a>
-      <a class="btn" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">浏览文章</a>
+      <a class="btn btn-primary svg-button" href="{{ site.Home.RelPermalink }}">{{ partial "button-frame.html" (dict "id" "error-home" "variant" "gold") }}<span class="button-content">回到首页</span></a>
+      <a class="btn svg-button" href="{{ partial "site-url.html" (dict "site" site "pageRef" "posts") }}">{{ partial "button-frame.html" (dict "id" "error-posts" "variant" "cream") }}<span class="button-content">浏览文章</span></a>
     </div>
   </div>
 {{ end }}

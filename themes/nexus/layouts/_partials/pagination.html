@@ -7,15 +7,15 @@
   {{- if gt .TotalPages 1 }}
 <nav class="pagination" aria-label="分页">
   {{- with .Prev }}
-  <a class="page-link" href="{{ .URL }}" rel="prev"><span aria-hidden="true">←</span> 上一页</a>
+  <a class="page-link svg-button" href="{{ .URL }}" rel="prev">{{ partial "button-frame.html" (dict "id" "pagination-prev" "variant" "cream") }}<span class="button-content"><span aria-hidden="true">←</span> 上一页</span></a>
   {{- else }}
-  <span class="page-link is-disabled"><span aria-hidden="true">←</span> 上一页</span>
+  <span class="page-link is-disabled svg-button">{{ partial "button-frame.html" (dict "id" "pagination-prev-disabled" "variant" "soft") }}<span class="button-content"><span aria-hidden="true">←</span> 上一页</span></span>
   {{- end }}
   <span class="page-info">第 {{ .PageNumber }} / {{ .TotalPages }} 页</span>
   {{- with .Next }}
-  <a class="page-link" href="{{ .URL }}" rel="next">下一页 <span aria-hidden="true">→</span></a>
+  <a class="page-link svg-button" href="{{ .URL }}" rel="next">{{ partial "button-frame.html" (dict "id" "pagination-next" "variant" "cream") }}<span class="button-content">下一页 <span aria-hidden="true">→</span></span></a>
   {{- else }}
-  <span class="page-link is-disabled">下一页 <span aria-hidden="true">→</span></span>
+  <span class="page-link is-disabled svg-button">{{ partial "button-frame.html" (dict "id" "pagination-next-disabled" "variant" "soft") }}<span class="button-content">下一页 <span aria-hidden="true">→</span></span></span>
   {{- end }}
 </nav>
   {{- end -}}

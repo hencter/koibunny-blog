@@ -11,6 +11,7 @@
   标签链接用 z-index 抬到覆盖层之上，仍然是独立的可点目标。
 */ -}}
 {{- $p := .page | default . -}}
+{{- $cardID := md5 $p.RelPermalink -}}
 {{- $fmt := site.Params.listDateFormat | default "2006-01-02" -}}
 {{- $summary := "" -}}
 {{- with $p.Description -}}
@@ -32,8 +33,8 @@
     {{- end }}
     {{- with $p.GetTerms "tags" }}
     <ul class="tag-list tag-list-sm">
-      {{- range . }}
-      <li><a class="tag" href="{{ .RelPermalink }}">#{{ .LinkTitle }}</a></li>
+      {{- range $tagIndex, $tag := . }}
+      <li><a class="tag svg-button" href="{{ .RelPermalink }}">{{ partial "button-frame.html" (dict "id" (printf "%s-tag-%d" $cardID $tagIndex) "variant" "soft") }}<span class="button-content">#{{ .LinkTitle }}</span></a></li>
       {{- end }}
     </ul>
     {{- end }}

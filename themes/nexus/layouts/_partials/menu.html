@@ -26,13 +26,18 @@
 -}}
 {{- with index site.Menus .menuID -}}
 <ul class="{{ $class }}">
-  {{- range . -}}
+  {{- range $index, $entry := . -}}
     {{- $active := or ($page.IsMenuCurrent .Menu .) ($page.HasMenuCurrent .Menu .) -}}
     {{- $url := .URL -}}
     {{- with .Page }}{{ $url = .RelPermalink }}{{ end -}}
     {{- $icon := index $icons .Name | default "article" -}}
+    {{- $variant := "wood" -}}
+    {{- if $active }}{{ $variant = "gold" }}{{ end -}}
     <li class="menu-item{{ if $active }} is-active{{ end }}">
-      <a href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}>{{ partial "icon.html" (dict "name" $icon "class" "menu-icon") }}{{ .Name }}</a>
+      <a class="svg-button" href="{{ $url }}"{{ if $active }} aria-current="page"{{ end }}>
+        {{ partial "button-frame.html" (dict "id" (printf "%s-%d" $class $index) "variant" $variant) }}
+        <span class="button-content">{{ partial "icon.html" (dict "name" $icon "class" "menu-icon") }}{{ .Name }}</span>
+      </a>
     </li>
   {{- end -}}
 </ul>

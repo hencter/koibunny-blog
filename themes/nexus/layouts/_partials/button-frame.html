@@ -1,0 +1,27 @@
+{{- $id := .id | default "ui-button" | urlize -}}
+{{- $variant := .variant | default "cream" -}}
+<svg class="button-frame button-frame-{{ $variant }}" viewBox="0 0 224 64" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+  <defs>
+    <linearGradient id="{{ $id }}-surface" x1="0" y1="0" x2="0" y2="1">
+      {{- if eq $variant "gold" }}
+      <stop offset="0" stop-color="#ffe27a"/>
+      <stop offset="0.48" stop-color="#ffd052"/>
+      <stop offset="1" stop-color="#ffb832"/>
+      {{- else if eq $variant "wood" }}
+      <stop offset="0" stop-color="#8e5137"/>
+      <stop offset="1" stop-color="#673725"/>
+      {{- else if eq $variant "soft" }}
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="1" stop-color="#f2e5c8"/>
+      {{- else }}
+      <stop offset="0" stop-color="#fffdf7"/>
+      <stop offset="0.52" stop-color="#fff8e9"/>
+      <stop offset="1" stop-color="#f4e6c9"/>
+      {{- end }}
+    </linearGradient>
+  </defs>
+  <path class="button-frame-shadow" d="M14 6H206Q210 6 213 9L216 12Q219 15 219 19V52Q219 55 216 58L214 60Q212 62 209 62H14Q10 62 8 60L6 58Q5 56 5 53V15Q5 12 7 10L10 7Q11 6 14 6Z"/>
+  <path class="button-frame-face" fill="url(#{{ $id }}-surface)" d="M12 2H204Q207 2 209 4L213 8Q215 10 215 13V48Q215 51 213 53L209 57Q207 59 204 59H12Q9 59 7 57L3 53Q1 51 1 48V13Q1 10 3 8L7 4Q9 2 12 2Z"/>
+  <path class="button-frame-highlight" d="M12 6H201Q204 6 206 8L210 12"/>
+  <path class="button-frame-shade" d="M6 47Q6 50 9 52L12 55H202Q205 55 208 52L210 49"/>
+</svg>

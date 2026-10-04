@@ -24,9 +24,9 @@
     <span class="search-carrot" aria-hidden="true">{{ partial "icon.html" (dict "name" "carrot") }}</span>
   </label>
 
-  <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
-    <span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span>
-    <span class="sr-only">切换导航</span>
+  <button class="nav-toggle svg-button" type="button" aria-expanded="false" aria-controls="site-nav" data-nav-toggle>
+    {{ partial "button-frame.html" (dict "id" "mobile-nav-toggle" "variant" "wood") }}
+    <span class="button-content"><span class="nav-toggle-bars" aria-hidden="true"><span></span><span></span><span></span></span><span class="sr-only">切换导航</span></span>
   </button>
 </div>
 <p class="search-status sr-only" aria-live="polite" data-search-status></p>

@@ -8,6 +8,7 @@
   项目卡多一条 status 徽标和一行外链，位置在卡片底部。
 */ -}}
 {{- $p := .page | default . -}}
+{{- $buttonID := md5 $p.RelPermalink -}}
 {{- $summary := "" -}}
 {{- with $p.Description -}}
   {{- $summary = . -}}
@@ -35,9 +36,9 @@
     </ul>
     {{- end }}
     <div class="project-card-links">
-      {{- with $p.Params.repo }}<a href="{{ . }}" target="_blank" rel="noopener">源码<span aria-hidden="true"> ↗</span></a>{{ end }}
-      {{- with $p.Params.demo }}<a href="{{ . }}" target="_blank" rel="noopener">演示<span aria-hidden="true"> ↗</span></a>{{ end }}
-      <a href="{{ $p.RelPermalink }}">详情<span aria-hidden="true"> →</span></a>
+      {{- with $p.Params.repo }}<a class="svg-button" href="{{ . }}" target="_blank" rel="noopener">{{ partial "button-frame.html" (dict "id" (printf "%s-source" $buttonID) "variant" "cream") }}<span class="button-content">源码<span aria-hidden="true"> ↗</span></span></a>{{ end }}
+      {{- with $p.Params.demo }}<a class="svg-button" href="{{ . }}" target="_blank" rel="noopener">{{ partial "button-frame.html" (dict "id" (printf "%s-demo" $buttonID) "variant" "gold") }}<span class="button-content">演示<span aria-hidden="true"> ↗</span></span></a>{{ end }}
+      <a class="svg-button" href="{{ $p.RelPermalink }}">{{ partial "button-frame.html" (dict "id" (printf "%s-detail" $buttonID) "variant" "cream") }}<span class="button-content">详情<span aria-hidden="true"> →</span></span></a>
     </div>
   </div>
 </article>

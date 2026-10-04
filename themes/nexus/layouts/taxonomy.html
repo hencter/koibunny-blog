@@ -17,9 +17,10 @@
     <ul class="term-cloud">
       {{- range . }}
       <li>
-        <a class="term-chip hue-{{ mod (len .LinkTitle) 6 }}" href="{{ .RelPermalink }}">
-          <span class="term-name">#{{ .LinkTitle }}</span>
-          <span class="term-count">{{ len .Pages }}</span>
+        {{- $termID := md5 .RelPermalink -}}
+        <a class="term-chip svg-button hue-{{ mod (len .LinkTitle) 6 }}" href="{{ .RelPermalink }}">
+          {{ partial "button-frame.html" (dict "id" (printf "term-%s" $termID) "variant" "cream") }}
+          <span class="button-content"><span class="term-name">#{{ .LinkTitle }}</span><span class="term-count">{{ len .Pages }}</span></span>
         </a>
       </li>
       {{- end }}

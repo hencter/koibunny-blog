@@ -132,6 +132,24 @@
 .hero-actions .ui-icon { width: 1.85em; height: 1.85em; overflow: visible; }
 .hero-actions .icon-rabbit { color: #63372a; }
 
+/* Hero 主按钮使用与参考稿一致的大号圆润倒角比例。 */
+.hero-actions .svg-button {
+  min-width: 214px;
+  min-height: 60px;
+  padding: 0 23px 4px;
+}
+
+.hero-actions .svg-button:hover {
+  transform: translate(2px, 2px);
+}
+
+.hero-actions .button-content {
+  gap: 9px;
+  white-space: nowrap;
+  color: #241d27;
+  text-shadow: 1px 1px 0 rgba(255,255,255,.72);
+}
+
 .section-block {
   position: relative;
   z-index: 1;
@@ -185,6 +203,9 @@
 }
 
 .category-card:hover { color: inherit; background: #fff4cc; transform: translate(2px,2px); box-shadow: 2px 2px 0 #c4ae82; }
+.category-card.svg-button { display: block; background: transparent; border: 0; box-shadow: none; }
+.category-card.svg-button:hover { background: transparent; box-shadow: none; }
+.category-card.svg-button > .button-content { width: 100%; min-height: 60px; display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 14px; }
 .category-icon { display: grid; place-items: center; width: 48px; height: 48px; font-size: 1.7rem; background: #ffe5a8; border: 2px solid #6a4933; }
 .category-icon .ui-icon { width: 1.18em; height: 1.18em; overflow: visible; }
 .category-experiment .category-icon { background: #dff2ff; }
@@ -213,8 +234,10 @@
 .empty-state { margin: 20px 0; padding: 22px; text-align: center; font-weight: 800; background: #fff6d9; border: 3px dashed #b88743; }
 
 .term-cloud { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; }
-.term-chip { display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px; color: var(--navy); background: var(--paper); border: var(--hair) solid var(--brown-700); box-shadow: 3px 3px 0 var(--sand); font-family: var(--font-mono); font-size: .84rem; font-weight: 700; }
-.term-chip:hover { color: var(--brown-900); background: #fff4cc; transform: translate(2px,2px); box-shadow: 1px 1px 0 var(--sand); }
+.term-chip { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; padding: 8px 16px 11px; color: var(--navy); background: transparent; border: 0; box-shadow: none; font-family: var(--font-mono); font-size: .84rem; font-weight: 700; }
+.term-chip:hover { color: var(--brown-900); background: transparent; transform: translate(2px,2px); box-shadow: none; }
+.term-chip .button-content { gap: 9px; }
+.term-chip:hover .button-frame-face { fill: #fff4cc; }
 .term-count { padding: 1px 7px; color: var(--brown-700); background: var(--cream-2); border: 2px solid var(--sand); font-size: .72rem; }
 
 @media (max-width: 1080px) {
