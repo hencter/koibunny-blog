@@ -9,7 +9,7 @@
 # 本地 `hugo server` 会自动覆盖它，不需要为此改动。
 # 改 GitHub 用户名或仓库名后必须同步这里：Pages 不会把旧地址重定向过来（旧地址直接 404），
 # 而 canonical / og:url / og:image / sitemap 全部由它生成。
-baseURL = 'https://koibunny.github.io/tech-blog/'
+baseURL = 'https://koibunny.cn/'
 title = 'KoiBunny 的 AI 博客'
 theme = 'nexus'
 
